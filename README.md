@@ -2,7 +2,9 @@
 
 A self-contained, plain-language logistics planning demonstration for one warehouse in Guwahati, three predefined road corridors, customer-requested **Booking End Dates**, and a limited fleet of different-capacity vehicles. Every *scheduled* vehicle must be between **80% and 100% loaded**. Unschedulable orders are reported as exceptions, not silently dispatched.
 
-## Order fulfillment and order types (new)
+**GitHub edition:** This repository contains the standalone browser demo, its editable frontend source, a Python rebuild script, and a focused Node.js planner test. The optional local ingestion server, sample CSV files, and full browser/server test suite are available in the separate project ZIP shared in the conversation, but are not in this GitHub repository. The HTML demo runs without them.
+
+## Order fulfillment and order types
 
 **A planned departure is not a completed dispatch.** The Orders view now has two separate columns:
 
@@ -18,7 +20,7 @@ Under **Order Fulfillment**, users can view a record of each stage and any truck
 ## Run the demonstration
 
 - Open `index.html` in a modern desktop browser. The embedded frontend and sample order data work without an internet connection.
-- Or start the optional local Python server using `python server.py`, then open the local address it prints. The server provides authenticated incoming-order ingestion and sample-cart fetching, but it is not an order-promise service.
+- If you want to serve the included HTML locally, run `python -m http.server 8000` and open `http://localhost:8000`. The optional order-ingestion Python server from the separate project ZIP is not included in this GitHub edition.
 - Use the **Delivery Promise** tab for the central customer-facing example. Choose **Bhopal** and **40 load units**, then select **Find available delivery dates**. The example should offer a feasible date nine days after today. Select that date and click **Confirm and record capacity reservation**. The initially isolated 40-unit Bhopal shipment and the new 40-unit booking can share a 100-unit small vehicle at exactly 80% loading.
 - Under **Fleet Management**, reduce or restore the truck counts to see how availability changes feasibility. Under **Exceptions**, review unscheduled orders and management-review requests.
 
@@ -45,37 +47,26 @@ There are three vehicle sizes in the sample: **small 100, medium 200, and large 
 
 - **Built-in orders and simulator:** Representative e-commerce records created for the demonstration; **not live Amazon orders**.
 - **Public sample carts:** `https://dummyjson.com/carts?limit=30` provides mock cart/product data. The app fetches real responses from that public example service, when internet is available, and imports only previously unseen cart identifiers. Indian destination, Booking End Date, and load fields are assigned by the demonstration, not supplied by the service. Repeated polling usually adds zero new records because the sample service is static.
-- **Incoming order Application Programming Interface:** The optional local Python server accepts authenticated incoming orders and the dashboard polls them. **It does not automatically guarantee their customer delivery dates**. A real online store would need to invoke an authoritative pre-promise reservation transaction before order acceptance.
+- **Incoming order Application Programming Interface:** This requires the optional Python server from the separate project ZIP; it is not active in the GitHub standalone edition. That server accepts authenticated incoming orders, but **does not automatically guarantee their customer delivery dates**. A real store needs an authoritative reservation transaction before accepting bookings.
 - **Amazon:** No real customer order data or merchant credentials are included. Amazon seller order integrations require authorized access and merchant approval.
 
-## Source structure
+## Repository files
 
 ```text
-index.html                 Standalone single-file demonstration
-src/template.html          Page layout
-src/styles.css             Styles
-src/catalog.js             Example orders, cart mappings, import and export
-src/lifecycle.js           Order status stages and allowed transitions
-src/planner.js             Scheduling, capacity checking, vehicle selection
-src/app.js                 Interaction and data feeds
-server.py                  Optional local Python ingestion service
-build.py                   Rebuild standalone index.html
-sample_data/               Example ecommerce order files
-DEMO_GUIDE.txt             Five-minute demonstration walkthrough
-tests/                     Scheduling, server and browser regression tests
+index.html              Standalone, browser-ready demonstration
+src/template.html       Page structure used for rebuilds
+src/styles.css          Dashboard styling
+src/planner.js          Scheduling and vehicle assignment logic
+src/catalog.js          Example orders and imports
+src/lifecycle.js        Order statuses and transitions
+src/app.js              Interface interactions and browser data feeds
+build.py                Rebuild standalone index.html
+tests/test_planner.js   Booking, loading and lifecycle checks
 ```
 
-To rebuild after changing source: `python build.py`.
+To rebuild after editing the frontend sources: `python build.py`.
 
-To run the tests:
-
-```bash
-node tests/test_planner.js
-python tests/test_server.py
-python tests/test_ui.py
-```
-
-The browser test requires Python Playwright and Chromium. It intercepts the public example shopping-cart request with a known fixture to verify the flow; that does not verify external network availability. Tests also check date suggestions, confirmation, the planning reservation record, management-review workflow, confirmed-order risk warnings, and the form Cancel buttons.
+Run the included automated check with `node tests/test_planner.js` (Node.js 18 or later). The broader Python/browser/API test suite and optional server are in the separately provided source ZIP, not this GitHub repository.
 
 ## Production-readiness boundaries
 
