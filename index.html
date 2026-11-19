@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dispatch Intelligence | Dispatch Operations</title><meta name="description" content="E-commerce dispatch planning demo with fixed routes, Booking End Date commitments, and truck capacity rules.">
+<style>:root{--ink:#152333;--muted:#708096;--subtle:#96a2b0;--border:#e5eaf0;--bg:#f6f8fb;--white:#fff;--teal:#087f75;--teal2:#00a78d;--nav:#0d1e2c;--blue:#3568be;--red:#bd4d42;--orange:#a76d25;--shadow:0 6px 24px rgba(16,35,54,.045)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:var(--teal)}.app-shell{display:flex;min-height:100vh}.sidebar{width:248px;flex:0 0 248px;background:var(--nav);color:#d4e0e9;min-height:100vh;display:flex;flex-direction:column;padding:24px 13px;position:sticky;top:0;height:100vh;z-index:10}.brand{display:flex;align-items:center;gap:12px;padding:3px 15px 39px;color:#fff;font-size:22px;letter-spacing:-.8px;font-weight:780}.brand-icon{display:flex;align-items:center;justify-content:center;background:#12ad99;color:#fff;border-radius:13px;width:38px;height:38px;font-size:30px}.brand-iq{color:#25c7ad}.brand small{display:block;font-size:9px;font-weight:700;letter-spacing:2px;color:#849cae;margin-top:2px}.nav-label{padding:0 15px 13px;color:#7690a4;font-size:10px;letter-spacing:1.4px;font-weight:800}.nav-item{display:flex;align-items:center;gap:12px;border:0;border-radius:10px;background:transparent;color:#9fb3c5;padding:12px 14px;width:100%;text-align:left;margin-bottom:3px;font-weight:560;font-size:13px}.nav-item:hover{color:#fff;background:#1d3446}.nav-item.active{color:#fff;background:#193d44;box-shadow:inset 3px 0 #24ceb1}.nav-glyph{font-size:20px;line-height:12px;width:20px;text-align:center}.nav-number{margin-left:auto;background:#233f50;color:#c9d8e4;border-radius:10px;padding:2px 6px;font-size:10px}.sidebar-bottom{margin-top:auto;padding:14px;border-top:1px solid #244151}.sidebar-location{display:flex;align-items:center;gap:9px;color:#d8e8ee;font-size:11px;font-weight:800;letter-spacing:.5px}.sidebar-location small{display:block;color:#698da0;font-size:9px;margin-top:4px}.location-dot{width:9px;height:9px;border-radius:50%;background:#22bba2;box-shadow:0 0 0 4px #155d5b}.sidebar-bottom p{font-size:10px;line-height:1.6;color:#7791a4;margin:18px 0 0}.main-shell{min-width:0;flex:1}.topbar{height:67px;padding:0 34px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:8}.topbar-left,.topbar-right{display:flex;gap:22px;align-items:center}.crumb{font-size:12px;color:#7e8a9d}.crumb span{color:#c6ced9;margin:0 9px}.crumb strong{color:#263e52}.source-indicator{display:inline-flex;align-items:center;gap:8px;border:1px solid #d8ede7;padding:7px 11px;border-radius:100px;color:#087e74;background:#f4fcf9;font-size:11px;font-weight:650}.pulse{height:7px;width:7px;border-radius:100%;background:#0aae91;box-shadow:0 0 0 3px #d9f4eb}.clock{font-size:11px;color:#94a0ae}.main-content{max-width:1580px;margin:auto;padding:31px 34px 20px}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:26px}.eyebrow{font-size:10px;letter-spacing:1.7px;font-weight:800;color:var(--teal);text-transform:uppercase}.page-head h1{font-size:29px;letter-spacing:-1.2px;line-height:1.2;margin:7px 0}.page-head p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.6;max-width:760px}.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #d8e1e8;background:#fff;color:#304558;border-radius:9px;padding:10px 14px;font-weight:700;font-size:12px;min-height:37px}.button:hover{border-color:#9ebeb7;background:#fbfefd}.button-primary{background:var(--teal);color:#fff;border-color:var(--teal)}.button-primary:hover{background:#076c66;color:#fff}.button-dark{background:#142d3e;color:#fff;border-color:#142d3e}.button-dark:hover{background:#2d4b5f;color:#fff}.button-danger{background:#fff8f7;color:#a84035;border-color:#f1d4d0}.button-small{padding:7px 11px;min-height:31px;font-size:11px}.button-link{background:transparent;border:none;color:var(--teal);padding:7px 0}.button-pill{border-radius:30px}.stat-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px;margin:18px 0 22px}.stat{border:1px solid var(--border);border-radius:14px;background:var(--white);padding:19px 20px;box-shadow:var(--shadow)}.stat small{font-size:11px;color:var(--muted);font-weight:660}.stat .value{font-size:28px;letter-spacing:-1px;font-weight:800;line-height:1.4;margin-top:10px}.stat .mini{font-size:11px;color:var(--muted);margin-top:6px}.stat .value.teal{color:var(--teal)}.stat .value.orange{color:var(--orange)}.card{background:var(--white);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}.card-head{padding:19px 21px;border-bottom:1px solid #eef1f5;display:flex;align-items:center;justify-content:space-between;gap:14px}.card-head h2{font-size:15px;letter-spacing:-.3px;margin:0 0 5px}.card-head p{font-size:11px;color:var(--muted);margin:0}.card-body{padding:19px 21px}.grid-two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:18px}.grid-half{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.three-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.badge{font-size:10px;font-weight:750;border-radius:6px;padding:5px 8px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}.badge-green{background:#e5f6ef;color:#057860}.badge-orange{background:#fff2df;color:#a06a25}.badge-blue{background:#eaf1fd;color:#2863a9}.badge-gray{background:#f0f3f6;color:#63758a}.badge-red{background:#fdece9;color:#b6443b}.subtle{font-size:11px;color:var(--muted)}.hint{background:#f1fbf7;color:#276b5b;padding:12px 14px;border:1px solid #dbefe7;border-radius:9px;font-size:12px;line-height:1.6}.warning-hint{background:#fff7ea;color:#875e23;border-color:#f6e6c9}.info-band{background:linear-gradient(120deg,#143b46,#0e6d68);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:20px}.info-band strong{font-size:17px}.info-band p{margin:6px 0 0;color:#bde1dc;font-size:12px}.info-band .button{background:#fff;color:#116a67}.table-wrap{width:100%;overflow:auto}.data-table{width:100%;border-collapse:collapse;text-align:left;min-width:770px}.data-table th{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#8997a7;font-weight:770;background:#fafbfd;padding:13px 18px;border-bottom:1px solid var(--border)}.data-table td{padding:13px 18px;border-bottom:1px solid #f0f2f5;font-size:12px;vertical-align:middle}.data-table tr:last-child td{border-bottom:0}.data-table tbody tr:hover{background:#fafdfb}.bold{font-weight:730;color:#21374b}.muted{color:var(--muted)}.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:15px 20px;border-bottom:1px solid #eff2f5}.toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.input,.select{border-radius:8px;border:1px solid #dce3ea;background:#fff;color:#283b4c;padding:10px 12px;font-size:12px;min-height:38px;max-width:100%}.input:focus,.select:focus{outline:2px solid #d0eee4;border-color:#18a993}.input-search{min-width:210px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:11px;font-weight:750;color:#516274}.field small{font-size:10px;color:var(--muted)}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field-grid .wide{grid-column:1/-1}.divide{height:1px;background:#edf0f4;margin:16px 0}.bar-bg{height:10px;overflow:hidden;background:#eef3f5;border-radius:30px}.bar-fill{height:100%;background:#00a18a;border-radius:30px}.bar-fill.mid{background:#e6a84c}.bar-fill.bad{background:#e07164}.route-row,.fleet-row,.log-row{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:14px 0;border-bottom:1px solid #f0f2f4}.route-row:last-child,.fleet-row:last-child,.log-row:last-child{border-bottom:0}.route-label{display:flex;gap:11px;align-items:center;font-weight:700}.route-marker{width:10px;height:10px;border-radius:100%}.route-stops{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.stop{padding:6px 9px;background:#f4f6f9;border:1px solid #e7edf2;border-radius:6px;color:#66778a;font-size:11px}.stop b{color:#385466}.trip-card{padding:17px;border:1px solid #e6edf2;border-radius:11px;margin-bottom:12px}.trip-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.trip-title{font-weight:780;font-size:13px}.trip-meta{display:flex;flex-wrap:wrap;gap:14px;color:#657789;font-size:11px;margin:10px 0 14px}.trip-load{display:flex;align-items:center;gap:12px}.trip-load .bar-bg{flex:1}.trip-manifest{padding:13px 0 0;color:#5c7185;font-size:11px;line-height:1.8}.kpi-value{font-size:23px;font-weight:800}.chart-row{display:flex;align-items:center;gap:12px;margin:14px 0}.chart-row label{width:115px;font-size:11px;color:#63768a;flex:0 0 115px}.chart-row .bar-bg{flex:1}.chart-row strong{font-size:11px;min-width:43px;text-align:right}.empty{text-align:center;padding:46px 22px;color:#8292a3}.empty b{display:block;color:#405569;font-size:13px;margin:10px 0}.callout{display:flex;gap:11px;background:#f4f8fa;border-radius:10px;padding:15px;line-height:1.6;font-size:12px;color:#54697a}.pill-tabs{display:flex;gap:5px;flex-wrap:wrap}.pill-tab{border:1px solid #e0e8ed;color:#6c7d91;padding:7px 10px;background:#fff;border-radius:7px;font-size:11px}.pill-tab.active{background:#0b7e74;color:#fff;border-color:#0b7e74}.step{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid #edf1f4}.step:last-child{border:0}.step-no{width:25px;height:25px;flex:0 0 25px;border-radius:8px;background:#e9f8f3;color:#067e70;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}.step h4{margin:0 0 3px}.step p{margin:0;color:var(--muted);font-size:11px;line-height:1.6}.counter{display:flex;align-items:center;gap:13px}.counter button{width:30px;height:30px;background:#f4f7f8;border:1px solid #dfebeb;border-radius:8px}.counter strong{min-width:23px;text-align:center}.modal-backdrop{background:rgba(8,21,32,.5);position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:20px}.modal{width:min(520px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 25px 80px rgba(0,0,0,.22)}.modal-head{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.modal-head h2{margin:0;font-size:18px}.modal-body{padding:22px 24px}.modal-footer{padding:15px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}.icon-button{border:0;background:transparent;color:#75889a;font-size:20px}.form-error{color:#b43c35;font-size:12px;padding-top:8px}.toast{background:#17394a;color:#fff;padding:13px 18px;border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.18);margin-bottom:9px;font-size:12px;max-width:370px}.toast.error{background:#8c3530}#toastRoot{position:fixed;bottom:20px;right:20px;z-index:50}.main-footer{display:flex;justify-content:space-between;color:#a0adbb;font-size:10px;padding:10px 0 20px;gap:14px}.mobile-menu{display:none}.small-note{font-size:11px;color:#7d8e9d;line-height:1.6}.metric-line{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0}.live-dot{width:7px;height:7px;border-radius:50%;background:#2ab492;display:inline-block;margin-right:5px}.list-unstyled{padding:0;margin:0;list-style:none}.right{text-align:right}.flex{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.space-between{display:flex;align-items:center;justify-content:space-between;gap:10px}.overline{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.data-label{display:flex;gap:8px;align-items:center}.statusbox{padding:15px 17px;border-radius:10px;border:1px solid #d8efe7;background:#f0fcf7;font-size:12px;line-height:1.7;color:#186e58;margin-top:16px}.statusbox.fail{background:#fff7f3;color:#a15c3c;border-color:#f4e3d5}.flow-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:11px;color:#8291a0;margin:14px 0}.flow-line strong{padding:7px 9px;background:#f3f7f9;color:#4a6274;border-radius:7px}.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;color:#6a7c8d}.chart-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}.event-tag{display:inline-block;font-size:10px;color:#0a8175;background:#eaf7f4;padding:4px 7px;border-radius:5px}.scrollable{max-height:480px;overflow-y:auto}.nowrap{white-space:nowrap}
+@media(max-width:1240px){.stat-grid{grid-template-columns:repeat(3,1fr)}.grid-two{grid-template-columns:1fr}.sidebar{width:216px;flex-basis:216px}.main-content{padding:28px 22px}.topbar{padding:0 22px}}
+@media(max-width:850px){.sidebar{position:fixed;left:-260px;transition:left .25s;width:245px}.sidebar.open{left:0}.main-shell{width:100%}.mobile-menu{display:block;border:0;background:none;color:#2e4c5c;font-size:19px}.topbar{padding:0 15px}.main-content{padding:24px 15px}.source-indicator,.clock{display:none}.page-head{flex-direction:column}.stat-grid{grid-template-columns:repeat(2,1fr)}.three-cols{grid-template-columns:1fr}.grid-half{grid-template-columns:1fr}.info-band{flex-direction:column;align-items:flex-start}.main-footer{display:block}}
+@media(max-width:520px){.topbar-right{gap:5px}.stat-grid{grid-template-columns:1fr 1fr;gap:9px}.stat{padding:15px}.stat .value{font-size:23px}.field-grid{grid-template-columns:1fr}.field-grid .wide{grid-column:auto}.toolbar{align-items:stretch}.input-search{width:100%}.topbar .button-small{font-size:10px}.main-footer span{display:block;margin:8px 0}}
+
+/* A restrained operations-app theme: neutral surfaces, one accent and compact controls. */
+:root{
+ --ink:#25313a;--muted:#697783;--subtle:#83919b;
+ --border:#dfe5e8;--bg:#f6f8f9;--white:#fff;--teal:#286d55;
+ --teal2:#286d55;--nav:#fff;--blue:#4f748c;
+ --shadow:0 1px 2px rgba(22,37,46,.025)
+}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;letter-spacing:0}
+.sidebar{background:#fff;color:#465560;border-right:1px solid var(--border);padding:22px 12px}
+.brand{color:#202c35;font-size:19px;font-weight:760;padding:5px 15px 38px;gap:10px;letter-spacing:-.4px}
+.brand-icon{background:#263944;color:#fff;border-radius:5px;font-size:12px;font-weight:800;letter-spacing:0;width:34px;height:34px}
+.brand-iq{color:inherit}.brand small{color:#87929b;letter-spacing:1.25px;font-weight:600;font-size:8px}
+.nav-label{color:#97a1a8;letter-spacing:.8px;font-weight:750}
+.nav-item{color:#596774;border-radius:6px;padding:11px 13px;font-weight:530;margin-bottom:1px}
+.nav-item:hover{color:#1d3e31;background:#edf2f0}
+.nav-item.active{background:#eaf1ee;box-shadow:inset 2px 0 #2b735b;color:#1f5945;font-weight:700}
+.nav-number{background:#edf0f2;color:#566575}
+.sidebar-bottom{border-color:#e7ebed}.sidebar-location{color:#374a54}.sidebar-location small{color:#89969f}
+.location-dot{background:#34866a;box-shadow:none}.sidebar-bottom p{color:#88959d}
+.main-shell{background:#f7f9fa}.topbar{border-color:#e4e9ec}
+.page-head h1{font-size:26px;font-weight:720;letter-spacing:-.7px}.page-head p{font-size:12px}
+.eyebrow{color:#74818b;font-size:10px;letter-spacing:.7px}
+.card,.stat{border-radius:8px;box-shadow:none}
+.stat{padding:18px 19px}.stat .value{font-weight:730;letter-spacing:-.65px}
+.card-head h2{font-size:14px;letter-spacing:-.1px}
+.badge{border-radius:5px;font-weight:650}
+.button{border-radius:6px}.button-primary{background:#286d55;border-color:#286d55}
+.button-primary:hover{background:#1d5944}.button-dark{background:#263944}
+.info-band{background:#eaf1ed;color:#1e4e3b;border:1px solid #d9e6df;border-radius:8px;padding:17px 20px}
+.info-band strong{font-size:14px}.info-band p{color:#6a7f73}.info-band .button{background:#fff;color:#2a614b;border:1px solid #cbdcd1}
+.info-band .overline{color:#527363!important}
+.trip-card{border-radius:6px}.pill-tab,.stop{border-radius:5px}
+.stat .value.teal{color:#25684f}.stat .value.orange{color:#a27434}
+.bar-fill{background:#357f68}.badge-green{background:#e9f3ec;color:#246a4c}
+.badge-orange{background:#faf2e3;color:#8b672d}
+.statusbox{background:#f0f7f2;border-color:#d8e9dd;color:#275e45}
+.main-footer{color:#8997a0}
+.source-indicator{background:#f1f5f3;color:#39735a;border-color:#e1ebe6}
+
+/* Branding and confirmation cleanup */
+.brand{gap:0}
+.modal-footer{flex-wrap:wrap}
+.modal-message{margin:0;line-height:1.6;font-size:13px;color:#586670}
+.table-row-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.button-quiet-danger{color:#a33e35;border-color:#e9d8d5;background:#fff}
+.button-quiet-danger:hover{background:#fff3f0;border-color:#c88b84}
+
+/* Branding and confirmation cleanup */
+.brand{gap:0}
+.modal-footer{flex-wrap:wrap}
+.modal-message{margin:0;line-height:1.6;font-size:13px;color:#586670}
+.table-row-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.button-quiet-danger{color:#a33e35;border-color:#e9d8d5;background:#fff}
+.button-quiet-danger:hover{background:#fff3f0;border-color:#c88b84}
+
+/* Branding and confirmation cleanup */
+.brand{gap:0}
+.modal-footer{flex-wrap:wrap}
+.modal-message{margin:0;line-height:1.6;font-size:13px;color:#586670}
+.table-row-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.button-quiet-danger{color:#a33e35;border-color:#e9d8d5;background:#fff}
+.button-quiet-danger:hover{background:#fff3f0;border-color:#c88b84}
+
+/* Delivery promise date suggestions */
+.booking-availability{margin-top:16px;padding:14px;border:1px solid #dbe6e0;border-radius:7px;background:#f7faf8;font-size:12px}
+.date-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.date-choice{background:white;text-align:left;border:1px solid #d7e2dc;border-radius:6px;padding:11px;color:#314b3c;cursor:pointer;display:flex;flex-direction:column;gap:5px}
+.date-choice:hover,.date-choice:focus{border-color:#2e7457;box-shadow:0 0 0 1px #2e7457}
+.date-choice strong{font-size:12px}.date-choice small{color:#728076;font-size:10px}
+@media(max-width:520px){.date-choice-grid{grid-template-columns:1fr}}
+
+/* Fulfillment lifecycle: compact, neutral, operational and clearly separate from planning. */
+.lifecycle-panel{margin:15px 0}
+.lifecycle-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.lifecycle-counter{font:inherit;background:#fbfcfc;border:1px solid #dee6e4;border-radius:7px;padding:12px 13px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;color:#53636d;min-width:0}
+.lifecycle-counter span{font-size:11px;line-height:1.45}
+.lifecycle-counter strong{font-size:18px;color:#273a36;font-variant-numeric:tabular-nums}
+.lifecycle-counter:hover,.lifecycle-counter.selected{border-color:#79a994;background:#edf6f0;color:#255a43}
+.fulfillment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:16px 0}
+.fulfillment-card .card-head{gap:12px;align-items:center}
+.fulfillment-card .card-head p{font-size:11px;margin-top:6px}
+.fulfillment-card .card-body{padding-top:8px;padding-bottom:8px}
+.fulfillment-row{padding:10px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #edf1f1}
+.fulfillment-row:last-child{border-bottom:0}
+.fulfillment-row strong{font-size:12px}
+.fulfillment-row small,.block{display:block;margin-top:5px}
+.fulfillment-row small{color:#84909b;font-size:10px}
+.table-row-actions{flex-wrap:nowrap}
+.data-table th{white-space:nowrap}
+@media(max-width:1020px){.lifecycle-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.fulfillment-grid{grid-template-columns:1fr}.lifecycle-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.lifecycle-counter{padding:10px}}
+/* Keep fulfillment controls discoverable even when the orders table scrolls. */
+.data-table th:last-child,.data-table td:last-child{position:sticky;right:0;z-index:2;box-shadow:-10px 0 13px -13px rgba(33,56,69,.25)}
+.data-table th:last-child{background:#fafbfd;z-index:3}
+.data-table td:last-child{background:#fff}
+.data-table tbody tr:hover td:last-child{background:#fafdfb}
+@media(max-width:700px){.data-table td:last-child{min-width:145px}.table-row-actions{flex-wrap:wrap}}
+
+
+/* Fleet controls: clearly visible plus/minus icons, with accessible focus/disabled states. */
+.counter{gap:9px;flex-shrink:0}
+.counter .fleet-step-button{
+  appearance:none;
+  width:38px;
+  height:38px;
+  min-width:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid #91b6a1;
+  border-radius:7px;
+  background:#eaf3ed;
+  color:#174b37;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:25px;
+  font-weight:800;
+  line-height:1;
+  opacity:1;
+  cursor:pointer;
+}
+.counter .fleet-step-button:hover:not(:disabled){background:#d7e9df;border-color:#498767;color:#0f3526}
+.counter .fleet-step-button:focus-visible{outline:3px solid #2b7a59;outline-offset:2px}
+.counter .fleet-step-button:active:not(:disabled){background:#b5d9c7}
+.counter .fleet-step-button:disabled{
+  opacity:1;
+  background:#f1f3f4;
+  border-color:#d7dfe1;
+  color:#84929a;
+  cursor:not-allowed;
+}
+.counter strong{min-width:24px;font-size:14px;color:#1e323b;font-variant-numeric:tabular-nums}
+</style></head><body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span>Dispatch Intelligence<small>LOGISTICS OPERATIONS</small></span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav id="nav" aria-label="Dashboard sections">
+      <button class="nav-item active" data-page="overview"><span class="nav-glyph">◫</span> Overview</button>
+      <button class="nav-item" data-page="orders"><span class="nav-glyph">▤</span> Orders <span class="nav-number" id="navOrderCount"></span></button>
+      <button class="nav-item" data-page="fulfillment"><span class="nav-glyph">▥</span> Order Fulfillment</button>
+      <button class="nav-item" data-page="planning"><span class="nav-glyph">▣</span> Dispatch Planning</button>
+      <button class="nav-item" data-page="booking"><span class="nav-glyph">◷</span> Delivery Promise</button>
+      <button class="nav-item" data-page="fleet"><span class="nav-glyph">▱</span> Fleet Management</button>
+      <button class="nav-item" data-page="routes"><span class="nav-glyph">⇢</span> Route Network</button>
+      <button class="nav-item" data-page="live"><span class="nav-glyph">↗</span> Order Data Sources</button>
+      <button class="nav-item" data-page="analytics"><span class="nav-glyph">◴</span> Analytics</button>
+      <button class="nav-item" data-page="exceptions"><span class="nav-glyph">⚑</span> Exceptions <span class="nav-number" id="navExceptionCount"></span></button>
+    </nav>
+    <div class="sidebar-bottom"><div class="sidebar-location"><span class="location-dot"></span><span>GUWAHATI WAREHOUSE <small>THREE FIXED ROAD CORRIDORS</small></span></div><p>Planning demonstration. Dispatch data is simulated unless a verified inbound integration is connected.</p></div>
+  </aside>
+  <div class="main-shell"><header class="topbar"><div class="topbar-left"><button class="mobile-menu" id="menuBtn" aria-label="Toggle navigation">☰</button><div class="crumb">Operations <span>/</span> <strong id="pageCrumb">Overview</strong></div></div><div class="topbar-right"><span class="source-indicator" id="sourceIndicator"><span class="pulse"></span> Demo workspace</span><span class="clock" id="clock"></span><button class="button button-dark button-small" id="quickAdd">+ New order</button></div></header>
+    <main class="main-content"><div id="pageBody"></div><footer class="main-footer"><span>Dispatch Intelligence · Dispatch planning demonstration</span><span>Exact Booking End Date · Minimum 80% vehicle fill · One warehouse · Three corridors</span></footer></main>
+  </div>
+</div>
+<div id="modalRoot"></div><div id="toastRoot" aria-live="polite"></div><input id="csvInput" type="file" accept=".csv,text/csv" hidden><input id="jsonInput" type="file" accept=".json,application/json" hidden>
+<script>(function (global) {
+  'use strict';
+
+  const ROUTES = [
+    { id: 'north', name: 'Punjab Corridor', color: '#4f76e8', short: 'North', factor: 1.10, roundTripDays: 16, stops: [
+      ['Patna',2], ['Prayagraj',3], ['Lucknow',4], ['Jaipur',5], ['Delhi',6], ['Chandigarh',7]
+    ]},
+    { id: 'central', name: 'Madhya Pradesh Corridor', color: '#b77b39', short: 'Central', factor: 0.93, roundTripDays: 12, stops: [
+      ['Patna',2], ['Prayagraj',3], ['Bhopal',5]
+    ]},
+    { id: 'south', name: 'Bengaluru Corridor', color: '#12a78a', short: 'South', factor: 1.28, roundTripDays: 16, stops: [
+      ['Kolkata',1], ['Bhubaneswar',2], ['Hyderabad',5], ['Bengaluru',7]
+    ]}
+  ];
+  const TYPES = [
+    {type:'Small', capacity:100, cost:9000},
+    {type:'Medium', capacity:200, cost:15000},
+    {type:'Large', capacity:400, cost:26000}
+  ];
+
+  function dayNumber(s) {
+    const parts = String(s).split('-').map(Number);
+    if (parts.length !== 3 || parts.some(x=>!Number.isInteger(x))) return NaN;
+    const [year,month,day]=parts;
+    if(year<2000 || year>2100 || month<1 || month>12 || day<1 || day>31) return NaN;
+    const n=Math.round(Date.UTC(year,month-1,day)/86400000);
+    if(dayString(n)!==String(s))return NaN;
+    return n;
+  }
+  function dayString(n) { return new Date(n * 86400000).toISOString().slice(0,10); }
+  function addDays(s,n) { return dayString(dayNumber(s)+n); }
+  function todayString() {const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+  function getRoute(id) { return ROUTES.find(r=>r.id===id); }
+  function getOptions(order, today) {
+    if (!order || !Number.isInteger(Number(order.units)) || Number(order.units) <= 0) return [];
+    const bid=dayNumber(order.bid);
+    if (!Number.isFinite(bid)) return [];
+    return ROUTES.flatMap(route => {
+      const stop=route.stops.find(([city])=>city === order.destination);
+      if (!stop) return [];
+      const depart=bid-stop[1];
+      if (depart < dayNumber(today)) return [];
+      return [{routeId:route.id, depart, transit:stop[1]}];
+    });
+  }
+  function createFleet(counts, busyTrips=[]) {
+    const fleet=[];
+    for (const type of TYPES) {
+      const count = Math.max(0,Math.min(20,Math.floor(Number(counts[type.type])||0)));
+      for(let i=1;i<=count;i++) fleet.push({id:`${type.type[0]}-${String(i).padStart(2,'0')}`,type:type.type,capacity:type.capacity,cost:type.cost, nextAvailable:-Infinity});
+    }
+    // Already-departed trucks remain unavailable until their recorded return date.
+    // Busy trips are stored independently from future planning results.
+    for(const truck of fleet){
+      const until=busyTrips.filter(x=>x.truckId===truck.id).map(x=>dayNumber(x.returnDate)).filter(Number.isFinite);
+      if(until.length)truck.nextAvailable=Math.max(truck.nextAvailable,...until);
+    }
+    return fleet;
+  }
+  function bestPacks(orders, available, route) {
+    const n=orders.length;
+    if (!n || !available.length) return [];
+    if(n>12) return greedyPacks(orders,available,route);
+    const limit=1<<n;
+    const sums=new Float64Array(limit);
+    const counts=new Uint8Array(limit);
+    const committed=new Uint8Array(limit);
+    for(let m=1;m<limit;m++) {
+      const bit=m&-m, idx=31-Math.clz32(bit), prev=m^bit;
+      sums[m]=sums[prev]+Number(orders[idx].units);
+      counts[m]=counts[prev]+1;
+      committed[m]=committed[prev]+(orders[idx].confirmedBooking?1:0);
+    }
+    const byCapacity=new Map();
+    for(const truck of available){
+      if(byCapacity.has(truck.capacity)) continue;
+      const candidates=[];
+      for(let m=1;m<limit;m++) {
+        if(sums[m]>=0.8*truck.capacity-0.00001 && sums[m]<=truck.capacity+0.00001){
+          candidates.push(m);
+        }
+      }
+      byCapacity.set(truck.capacity,candidates);
+    }
+    // Dynamic programming over already-assigned order subsets; an individual truck
+    // may be used at most once. Each chosen manifest must meet [80%, 100%].
+    let states=new Map([[0,{cost:0, assignments:[],tripCount:0}]]);
+    for(const truck of available){
+      const next=new Map(states);
+      const tripCost=Math.round(truck.cost*route.factor);
+      for(const [mask,state] of states){
+        for(const sub of byCapacity.get(truck.capacity)){
+          if(mask & sub) continue;
+          const combined=mask|sub;
+          const cost=state.cost+tripCost;
+          const existing=next.get(combined);
+          if(!existing || cost<existing.cost || (cost===existing.cost && state.tripCount+1<existing.tripCount)){
+            next.set(combined,{cost,tripCount:state.tripCount+1,assignments:state.assignments.concat([{truck,mask:sub,units:sums[sub],tripCost}])});
+          }
+        }
+      }
+      states=next;
+    }
+    let bestMask=0, best=states.get(0);
+    for(const [mask,state] of states){
+      const better=committed[mask]>committed[bestMask] ||
+        (committed[mask]===committed[bestMask] && counts[mask]>counts[bestMask]) ||
+        (committed[mask]===committed[bestMask] && counts[mask]===counts[bestMask] && sums[mask]>sums[bestMask]) ||
+        (committed[mask]===committed[bestMask] && counts[mask]===counts[bestMask] && sums[mask]===sums[bestMask] && state.cost<best.cost) ||
+        (committed[mask]===committed[bestMask] && counts[mask]===counts[bestMask] && sums[mask]===sums[bestMask] && state.cost===best.cost && state.tripCount<best.tripCount);
+      if(better){bestMask=mask;best=state;}
+    }
+    return best.assignments.map(a=>({...a, orders:orders.filter((_,i)=>a.mask & (1<<i))}));
+  }
+  function greedyPacks(orders,available,route){
+    // Clearly labelled fallback for larger groups; demo is not a global optimizer.
+    const remaining=orders.slice().sort((a,b)=>(Number(!!b.confirmedBooking)-Number(!!a.confirmedBooking))||b.units-a.units);
+    const result=[];
+    for(const truck of available.slice().sort((a,b)=>a.capacity-b.capacity)){
+      const picks=[];
+      let sum=0;
+      for(const order of remaining){
+        if(sum+order.units<=truck.capacity){picks.push(order);sum+=order.units;}
+      }
+      if(sum>=0.8*truck.capacity){
+        result.push({truck,orders:picks,units:sum,tripCost:Math.round(truck.cost*route.factor)});
+        for(const o of picks)remaining.splice(remaining.findIndex(x=>x.id===o.id),1);
+      }
+    }
+    return result;
+  }
+  function failureReason(order, option, groups, schedules, fleet, today){
+    if(!option) return 'No feasible departure before the requested Booking End Date, or unsupported destination';
+    const group=groups.find(g=>g.key===`${option.depart}_${option.routeId}`);
+    if(!group) return 'No matching dispatch group';
+    const route=getRoute(option.routeId);
+    const total=group.orders.reduce((s,x)=>s+Number(x.units),0);
+    const minCap=Math.min(...TYPES.map(x=>x.capacity));
+    if(Number(order.units)>Math.max(...TYPES.map(x=>x.capacity))) return 'Order exceeds every individual truck capacity (splitting is not enabled)';
+    if(total<0.8*minCap) return `Only ${total} load units are available for this dispatch; minimum is ${0.8*minCap} for a Small truck`;
+    const available=fleet.filter(t=>t.nextAvailable<=option.depart);
+    if(!available.length) return 'No available vehicles; trucks are already assigned to other trips';
+    if(total > available.reduce((s,t)=>s+t.capacity,0)) return 'Insufficient remaining fleet capacity for this dispatch';
+    return 'No vehicle combination can satisfy the 80–100% fill rule and existing assignments';
+  }
+  function computeSchedule(orders, choices, counts, today, busyTrips=[]){
+    const fleet=createFleet(counts,busyTrips);
+    const todayDay=dayNumber(today);
+    const groupsMap=new Map();
+    for(const order of orders){
+      const opt=choices.get(order.id);
+      if(!opt) continue;
+      const key=`${opt.depart}_${opt.routeId}`;
+      if(!groupsMap.has(key)) groupsMap.set(key,{key,depart:opt.depart,routeId:opt.routeId,orders:[]});
+      groupsMap.get(key).orders.push(order);
+    }
+    const groups=[...groupsMap.values()].sort((a,b)=>
+       a.depart-b.depart || b.orders.filter(x=>x.confirmedBooking).length-a.orders.filter(x=>x.confirmedBooking).length || b.orders.reduce((s,x)=>s+Number(x.units),0)-a.orders.reduce((s,x)=>s+Number(x.units),0)
+    );
+    const schedules=[];
+    const scheduledIds=new Set();
+    for(const group of groups){
+      const route=getRoute(group.routeId);
+      const eligibleFleet=fleet.filter(t=>t.nextAvailable<=group.depart);
+      const assigned=bestPacks(group.orders,eligibleFleet,route);
+      for(const pack of assigned){
+        pack.truck.nextAvailable=group.depart+route.roundTripDays;
+        pack.orders.forEach(x=>scheduledIds.add(x.id));
+        schedules.push({
+          id:`T${String(schedules.length+1).padStart(2,'0')}`,
+          truckId:pack.truck.id, truckType:pack.truck.type,capacity:pack.truck.capacity,
+          units:pack.units,utilization:Math.round(pack.units/pack.truck.capacity*100),
+          tripCost:pack.tripCost, routeId:route.id, routeName:route.name,
+          depart:dayString(group.depart), returnDate:dayString(pack.truck.nextAvailable),
+          orders:pack.orders.map(o=>({id:o.id,destination:o.destination,units:Number(o.units),bid:o.bid}))
+        });
+      }
+    }
+    const unscheduled=orders.filter(o=>!scheduledIds.has(o.id)).map(o=>({
+      ...o,reason:failureReason(o,choices.get(o.id),groups,schedules,fleet,today)
+    }));
+    const cost=schedules.reduce((sum,t)=>sum+t.tripCost,0);
+    const deliveredUnits=schedules.reduce((sum,t)=>sum+t.units,0);
+    const totalUnits=orders.reduce((sum,o)=>sum+Number(o.units||0),0);
+    const overallUtil=schedules.length?
+      Math.round(schedules.reduce((sum,t)=>sum+t.units,0)/schedules.reduce((sum,t)=>sum+t.capacity,0)*100):0;
+    return {schedules,unscheduled,scheduledIds,cost,deliveredUnits,totalUnits,overallUtil,groups,firstDay:todayDay};
+  }
+  function plan(orders,counts,today=todayString(),busyTrips=[]){
+    const valid=orders.filter(o=>o&&o.id&&o.destination&&o.bid&&Number.isFinite(Number(o.units))&&Number(o.units)>0);
+    const options=new Map(valid.map(o=>[o.id,getOptions(o,today)]));
+    const choices=new Map(valid.map(o=>[o.id,(options.get(o.id)||[])[0]||null]));
+    let best=computeSchedule(valid,choices,counts,today,busyTrips);
+    const score=x=>({committed:valid.filter(o=>o.confirmedBooking&&x.scheduledIds.has(o.id)).length,n:x.scheduledIds.size,units:x.deliveredUnits,cost:x.cost});
+    function isBetter(a,b){
+      const x=score(a), y=score(b);
+      return x.committed>y.committed || x.committed===y.committed&&(x.n>y.n || x.n===y.n&&(x.units>y.units || x.units===y.units&&x.cost<y.cost));
+    }
+    const flexible=valid.filter(o=>options.get(o.id).length>1).sort((a,b)=>Number(b.units)-Number(a.units));
+    // Exhaustive route combinations for a small interactive demo; this handles
+    // coupled choices where swapping only one shared-stop order is insufficient.
+    if(flexible.length<=10) {
+      // Store the winning choice assignment independently from the mutable map.
+      let bestChoices=new Map(choices);
+      const previousIsBetter=isBetter;
+      function enumerateWithChoices(i) {
+        if(i===flexible.length){
+          const candidate=computeSchedule(valid,choices,counts,today,busyTrips);
+          if(previousIsBetter(candidate,best)){
+            best=candidate;
+            bestChoices=new Map(choices);
+          }
+          return;
+        }
+        const o=flexible[i];
+        for(const opt of options.get(o.id)){
+          choices.set(o.id,opt);
+          enumerateWithChoices(i+1);
+        }
+      }
+      enumerateWithChoices(0);
+      choices.clear();
+      for(const [id,choice] of bestChoices)choices.set(id,choice);
+    }else{
+      // For larger instances, keep route choice search bounded; no global-optimality claim.
+      for(let pass=0;pass<3;pass++) {
+        let improved=false;
+        for(const order of flexible){
+          let chosen=choices.get(order.id);
+          for(const choice of options.get(order.id)){
+            choices.set(order.id,choice);
+            const candidate=computeSchedule(valid,choices,counts,today,busyTrips);
+            if(isBetter(candidate,best)){
+              best=candidate;chosen=choice;improved=true;
+            }
+          }
+          choices.set(order.id,chosen);
+        }
+        if(!improved)break;
+      }
+    }
+    const detail=new Map();
+    best.schedules.forEach(s=>s.orders.forEach(o=>detail.set(o.id,{status:'scheduled',truckId:s.truckId,routeId:s.routeId,depart:s.depart,tripId:s.id})));
+    best.unscheduled.forEach(o=>detail.set(o.id,{status:'at-risk',reason:o.reason,routeId:choices.get(o.id)?.routeId||null,depart:choices.get(o.id)?dayString(choices.get(o.id).depart):null}));
+    return {...best, detail, choices, today, coverage:valid.length?Math.round(best.scheduledIds.size/valid.length*100):100,
+       totalOrders:valid.length, scheduledOrders:best.scheduledIds.size};
+  }
+  function makeSample(today=todayString(),scenario='base'){
+    let i=0;
+    const orders=[];
+    function add(dest,units,days,ref='Retail') {
+      orders.push({id:`ORD-${String(++i).padStart(3,'0')}`,destination:dest,units,bid:addDays(today,days),reference:ref});
+    }
+    add('Delhi',35,6); add('Chandigarh',45,7); add('Lucknow',10,4);
+    add('Bhopal',110,5); add('Prayagraj',40,3); add('Patna',25,2);
+    add('Bengaluru',90,7); add('Hyderabad',65,5); add('Kolkata',30,1);
+    add('Delhi',55,7); add('Jaipur',35,6);
+    add('Bengaluru',90,8); add('Bhubaneswar',35,3); add('Hyderabad',50,6);
+    add('Bhopal',40,9,'Low demand lane');
+    if(scenario==='spike'){
+      add('Chandigarh',200,7,'Peak demand'); add('Delhi',180,6,'Peak demand');
+      add('Bengaluru',220,7,'Peak demand'); add('Hyderabad',145,5,'Peak demand');
+      add('Bhopal',100,5,'Peak demand'); add('Bhopal',75,9,'Peak demand');
+      add('Lucknow',90,5,'Peak demand'); add('Delhi',150,7,'Peak demand');
+    }
+    return orders;
+  }
+  function evaluateBooking(orders, counts, order, today=todayString(),busyTrips=[]){
+    const current=plan(orders,counts,today,busyTrips);
+    const next=plan([...orders,order],counts,today,busyTrips);
+    const accepted=next.scheduledIds.has(order.id) && [...current.scheduledIds].every(id=>next.scheduledIds.has(id));
+    return {accepted,current,next,reason:accepted?'Booking fits a valid 80–100% dispatch without displacing an existing scheduled order':
+       next.detail.get(order.id)?.reason||'Booking would displace an existing scheduled order'};
+  }
+  const API={ROUTES,TYPES,dayNumber,dayString,addDays,todayString,getRoute,getOptions,createFleet,plan,makeSample,evaluateBooking};
+  if(typeof module!=='undefined'&&module.exports)module.exports=API;
+  global.DispatchPlanner=API;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>(function (global) {
+'use strict';
+const P=global.DispatchPlanner;
+const PRODUCTS=[
+ ['Wireless Earbuds','Electronics',2499],['Cotton T-Shirt','Fashion',899],['Smartphone Case','Electronics',599],['Running Shoes','Fashion',2999],
+ ['Yoga Mat','Sports',1299],['Stainless Water Bottle','Home',749],['Laptop Backpack','Accessories',1899],['Bluetooth Speaker','Electronics',3499],
+ ['Kids Building Blocks','Toys',999],['Light-Emitting Diode Desk Lamp','Home',1599],['Face Moisturizer','Beauty',699],['Kitchen Storage Set','Home',1199],
+ ['Phone Charging Cable','Electronics',349],['Sports Watch','Accessories',2299],['Bed Sheet Set','Home',1699],['Coffee Mug Set','Home',799]
+];
+const CITIES=P.ROUTES.flatMap(r=>r.stops.map(([city])=>city));
+function seed(today=P.todayString()) {
+ const basic=P.makeSample(today); const channels=['Web Store','Marketplace','Mobile Application'];
+ const active=basic.map((o,i)=>{
+   const [product,category,price]=PRODUCTS[(i*5+3)%PRODUCTS.length];
+   const fulfillmentStatus= i<3?'packed':i%4===0?'processing':i%4===1?'placed':'packed';
+   return {...o, product,category,amount:price*Math.max(1,Math.round(o.units/20)),
+    orderType:['Standard Order','Express Order','Bulk Order','Replacement Order'][i%4], fulfillmentStatus,
+    channel:channels[i%channels.length],source:'Illustrative seed',receivedAt:new Date(Date.now()-i*3600000).toISOString()};
+ });
+ // Historical sample records demonstrate actual fulfillment stages. These are not
+ // outstanding dispatch requests and must NOT be added to future trip optimization.
+ const historyTypes=['dispatched','in_transit','delivered','returned','cancelled'];
+ const historyDest=['Delhi','Hyderabad','Patna','Jaipur','Bengaluru'];
+ const history=historyTypes.map((fulfillmentStatus,i)=>{
+   const [product,category,price]=PRODUCTS[(i+7)%PRODUCTS.length];
+   const destination=historyDest[i];
+   const d=Math.min(...P.ROUTES.flatMap(r=>r.stops.filter(s=>s[0]===destination).map(s=>s[1])));
+   return {id:`HISTORY-${String(i+1).padStart(3,'0')}`,destination,units:[90,170,85,120,75][i],
+     bid:P.addDays(today,[-1,-2,-4,-8,0][i]+d),product,category,amount:price*3,
+     orderType:['Standard Order','Express Order','Bulk Order','Replacement Order','Standard Order'][i],
+     fulfillmentStatus,cancelled:fulfillmentStatus==='cancelled',
+     shippedAt:i<4?new Date(Date.now()-[1,2,4,8][i]*86400000).toISOString():undefined,
+     deliveredAt:i===2?new Date(Date.now()-86400000).toISOString():i===3?new Date(Date.now()-3*86400000).toISOString():undefined,
+     returnedAt:i===3?new Date(Date.now()-86400000).toISOString():undefined,
+     channel:'Marketplace',source:'Illustrative historical order (not live fulfillment)',
+     receivedAt:new Date(Date.now()-(i+6)*86400000).toISOString()};
+ });
+ return active.concat(history);
+}
+function simulateOrder(existing,today=P.todayString(),productOverride=null) {
+ const n=existing.length+1, city=CITIES[(n*7+Math.floor(Math.random()*CITIES.length))%CITIES.length];
+ const stops=P.ROUTES.flatMap(r=>r.stops.filter(s=>s[0]===city));
+ const minDays=Math.min(...stops.map(x=>x[1]));
+ const [product,category,price]=productOverride||PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
+ const units=[20,25,30,35,40,45,50,60,75,80,90,100,110][Math.floor(Math.random()*13)];
+ return {id:'EC-'+Date.now().toString(36).toUpperCase()+'-'+Math.floor(Math.random()*999).toString().padStart(3,'0'),
+  destination:city,units,bid:P.addDays(today,minDays+Math.floor(Math.random()*4)),
+  product,category,amount:price*Math.max(1,Math.round(units/20)),channel:'Live Simulator',
+  source:'Simulated event',receivedAt:new Date().toISOString()};
+}
+function fromCart(cart, idx, today=P.todayString()) {
+ const dest=CITIES[(idx*7+3)%CITIES.length];
+ const minDay=Math.min(...P.ROUTES.flatMap(r=>r.stops.filter(s=>s[0]===dest).map(s=>s[1])));
+ const first=cart.products?.[0]||{};
+ const totalQty=Number(cart.totalQuantity)||1;
+ // Demo mapping: cart quantity is NOT actual physical weight or volume.
+ const units=Math.min(150,Math.max(10,totalQty*12));
+ return {id:`DJ-CART-${cart.id}`,destination:dest,units,bid:P.addDays(today,minDay+(idx%4)),
+  product:first.title||`Cart #${cart.id}`,category:'Mixed cart',amount:Math.round((Number(cart.discountedTotal)||Number(cart.total)||0)*84),
+  channel:'DummyJSON sample dataset',orderType:'Standard Order',fulfillmentStatus:'placed',source:'Public sample cart (mapped to hypothetical India dispatch)',receivedAt:new Date().toISOString()};
+}
+function csvEscape(value) {const s=String(value??'');return /[\n\r,\"]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+const CSV_FIELDS=['id','destination','units','bid','product','category','amount','orderType','fulfillmentStatus','channel','source','receivedAt'];
+function toCSV(orders) {return [CSV_FIELDS.join(','),...orders.map(o=>CSV_FIELDS.map(k=>csvEscape(o[k])).join(','))].join('\r\n');}
+function parseCSV(text){
+ const rows=[];let row=[],cell='',quoted=false;
+ for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;}
+ if(cell||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} if(!rows.length)return [];
+ const fields=rows.shift().map(v=>v.trim().replace(/^\uFEFF/,''));
+ return rows.filter(r=>r.some(Boolean)).map(r=>Object.fromEntries(fields.map((k,i)=>[k,(r[i]||'').trim()]))).map(o=>({...o,units:Number(o.units),amount:Number(o.amount)||0}));
+}
+const API={PRODUCTS,CITIES,seed,simulateOrder,fromCart,toCSV,parseCSV};
+if(typeof module!=='undefined'&&module.exports)module.exports=API;
+global.DispatchData=API;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>(function (global) {
+  'use strict';
+  // Fulfillment is an observed or manually recorded operation, NOT an optimizer prediction.
+  const PHASES = [
+    {id:'placed', label:'Order Placed', tone:'gray'},
+    {id:'processing', label:'Processing', tone:'blue'},
+    {id:'packed', label:'Packed and Ready', tone:'teal'},
+    {id:'dispatched', label:'Dispatched', tone:'purple'},
+    {id:'in_transit', label:'In Transit', tone:'blue'},
+    {id:'delivered', label:'Delivered', tone:'green'},
+    {id:'returned', label:'Returned', tone:'orange'},
+    {id:'cancelled', label:'Cancelled', tone:'gray'}
+  ];
+  const TYPES = ['Standard Order', 'Express Order', 'Bulk Order', 'Replacement Order'];
+  const NEXT = {placed:'processing',processing:'packed',dispatched:'in_transit',in_transit:'delivered',delivered:'returned'};
+  function getStatus(order){
+    if(order.cancelled || order.fulfillmentStatus==='cancelled') return 'cancelled';
+    const status=order.fulfillmentStatus||'placed';
+    return PHASES.some(p=>p.id===status)?status:'placed';
+  }
+  function getLabel(value){return PHASES.find(p=>p.id===value)?.label||'Order Placed';}
+  function getTone(value){return PHASES.find(p=>p.id===value)?.tone||'gray';}
+  function isPlannable(order){return ['placed','processing','packed'].includes(getStatus(order));}
+  function isCancellable(order){return isPlannable(order);}
+  function next(order){return NEXT[getStatus(order)]||null;}
+  const API={PHASES,TYPES,NEXT,getStatus,getLabel,getTone,isPlannable,isCancellable,next};
+  if(typeof module!=='undefined'&&module.exports)module.exports=API;
+  global.DispatchLifecycle=API;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>(function(){
+'use strict';
+const P=window.DispatchPlanner, D=window.DispatchData, L=window.DispatchLifecycle;
+const DEFAULT_COUNTS={Small:3,Medium:3,Large:1}, STORAGE='dispatchiq_pro_state_v2';
+const names={overview:'Overview',orders:'Orders',fulfillment:'Order Fulfillment',planning:'Dispatch Planning',booking:'Delivery Promise',fleet:'Fleet Management',routes:'Route Network',live:'Order Data Sources',analytics:'Analytics',exceptions:'Exceptions'};
+let state=loadSaved(), view='overview', planResult=null, bookingResult=null, checkedBooking=null, availableDates=[], bookingDateInfo='', bookingDraftState=null, timer=null, pendingCarts=[], inboundCursor=0, serverAvailable=false, streamMode='sim', streamMs=4500, eventsDirty=false;
+let orderQuery='',orderFilter='all',orderTypeFilter='all',routeFilter='all',tripExpanded=new Set();
+let publicLastSync=null, publicStatus='Not connected', publicCount=0, publicAdded=0, publicError='';
+let publicBusy=false;
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function loadSaved(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||'null');if(x&&Array.isArray(x.orders)&&x.counts)return {...x,events:Array.isArray(x.events)?x.events:[],reviews:Array.isArray(x.reviews)?x.reviews:[],dispatchHistory:Array.isArray(x.dispatchHistory)?x.dispatchHistory:[],orders:x.orders.slice(0,350)};}catch(e){}return {orders:D.seed(),counts:{...DEFAULT_COUNTS},events:[],reviews:[],dispatchHistory:[],scenario:'normal',autoRun:true};}
+function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(e){}}
+function saveRouteConfig(){state.routeConfig=P.ROUTES.map(r=>({id:r.id,factor:r.factor,roundTripDays:r.roundTripDays,days:r.stops.map(s=>s[1])}));persist();}
+function restoreRouteConfig(){if(!Array.isArray(state.routeConfig))return;for(const config of state.routeConfig){const r=P.getRoute(config.id);if(r&&Array.isArray(config.days)&&config.days.length===r.stops.length){r.factor=Number(config.factor)||r.factor;r.roundTripDays=Number(config.roundTripDays)||r.roundTripDays;r.stops.forEach((stop,i)=>{stop[1]=Number(config.days[i])||stop[1]});}}}
+function note(type,text){state.events.unshift({time:new Date().toISOString(),type,text});state.events=state.events.slice(0,180);persist();}
+function toast(msg,err=false){const root=document.querySelector('#toastRoot');const el=document.createElement('div');el.className='toast'+(err?' error':'');el.textContent=msg;root.appendChild(el);setTimeout(()=>el.remove(),4200);}
+function activeOrders(){return state.orders.filter(o=>L.getStatus(o)!=='cancelled');}
+function plannableOrders(){return state.orders.filter(L.isPlannable);}
+function busyTrucks(){return (state.dispatchHistory||[]).map(t=>({truckId:t.truckId,returnDate:t.returnDate}));}
+function replan(){planResult=P.plan(plannableOrders(),state.counts,P.todayString(),busyTrucks());availableDates=[];bookingDateInfo='';checkedBooking=null;bookingResult=null;persist();updateNav();}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:0});}
+function pct(a,b){return b?Math.round(a/b*100):0;}
+function fmt(d){if(!d)return '—';try{return new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:d.length===10?undefined:'numeric'});}catch(e){return d;}}
+function badge(label,variant='gray'){return `<span class="badge badge-${variant}">${safe(label)}</span>`;}
+function orderStatus(o){return L.getStatus(o);}
+function planningStatus(o){
+ if(!L.isPlannable(o))return {name:'Not in future dispatch plan',tone:'gray'};
+ const d=planResult.detail.get(o.id);
+ if(d?.status==='scheduled')return {name:'Dispatch planned',tone:'green'};
+ if(d?.reason?.toLowerCase().includes('minimum')||d?.reason?.includes('80–100%')||d?.reason?.includes('load units'))return {name:'Awaiting consolidation',tone:'orange'};
+ return {name:'Needs scheduling review',tone:'orange'};
+}
+function lifecycleCounts(){return L.PHASES.map(x=>({...x,count:state.orders.filter(o=>L.getStatus(o)===x.id).length}));}
+function lifecycleSummary(){return `<div class="lifecycle-summary">${lifecycleCounts().map(x=>`<button class="lifecycle-counter ${orderFilter===x.id?'selected':''}" type="button" data-action="lifecycle-filter" data-filter="${x.id}"><span>${x.label}</span><strong>${x.count}</strong></button>`).join('')}</div>`;}
+
+function stat(title,value,sub,color=''){return `<div class="stat"><small>${title}</small><div class="value ${color}">${value}</div><div class="mini">${sub}</div></div>`;}
+function heading(title,subtitle,actions='',eyebrow='OPERATIONS CONTROL'){return `<div class="page-head"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${subtitle}</p></div><div class="actions">${actions}</div></div>`;}
+function empty(title,sub){return `<div class="empty"><div style="font-size:28px">◇</div><b>${title}</b>${sub}</div>`;}
+function recentEvents(n=6){return state.events.slice(0,n).map(e=>`<div class="log-row"><div><span class="event-tag">${safe(e.type)}</span><div style="font-size:12px;margin-top:7px">${safe(e.text)}</div></div><span class="subtle nowrap">${new Date(e.time).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</span></div>`).join('')||empty('No events yet','Run a plan or start the demo order stream.');}
+function routeSummary(){return P.ROUTES.map(r=>{const ss=planResult.schedules.filter(s=>s.routeId===r.id),units=ss.reduce((a,x)=>a+x.units,0);return {r,ss,units,cost:ss.reduce((a,x)=>a+x.tripCost,0)};});}
+function routeBars(){const rows=routeSummary(),top=Math.max(100,...rows.map(x=>x.units));return rows.map(({r,ss,units})=>`<div class="chart-row"><label><span class="route-marker" style="background:${r.color};display:inline-block;margin-right:7px"></span>${safe(r.name)}</label><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(units/top*100)}%;background:${r.color}"></div></div><strong>${units} load units</strong></div>`).join('');}
+function bookingRiskBanner(){const failed=plannableOrders().filter(o=>o.confirmedBooking&&!planResult.scheduledIds.has(o.id));return failed.length?`<div class="statusbox fail"><strong>Accepted delivery promises need attention.</strong> ${failed.length} previously confirmed booking(s) are now at risk because fleet, route or demand conditions changed. Review Exceptions before making further promises.</div>`:'';}
+function quickKpis(){const p=planResult;return `<div class="stat-grid">${stat('Upcoming orders planned',`${p.scheduledOrders} / ${p.totalOrders}`,'Planning is not physical dispatch')}${stat('Booking End Date coverage',p.coverage+'%','Exact requested arrival','teal')}${stat('Average vehicle fill',p.overallUtil+'%','Minimum 80% required','teal')}${stat('Planned trip cost',money(p.cost),'Illustrative cost model')}${stat('At-risk orders',p.unscheduled.length,'Not silently committed',p.unscheduled.length?'orange':'teal')}</div>`;}
+function renderOverview(){let p=planResult;return heading('Dispatch overview','Plan deliveries from Guwahati across three fixed corridors.',`<button class="button" data-action="reset">Reset demo</button><button class="button button-primary" data-action="optimize">Run planner</button>`) + `<div class="info-band"><div><div class="overline">DISPATCH OPERATIONS</div><strong>Plan on-time delivery with minimum 80% truck fill.</strong><p>Orders, fleet availability and dispatch exceptions in one workspace.</p></div><button class="button" data-page="live">Manage order data</button></div>`+quickKpis()+`<div class="card lifecycle-panel"><div class="card-head"><div><h2>Order fulfillment stages</h2><p>Physical order status is different from a planned truck assignment.</p></div><button class="button button-small" data-page="fulfillment">View all stages</button></div><div class="card-body">${lifecycleSummary()}</div></div>`+bookingRiskBanner()+`<div class="grid-two"><div class="card"><div class="card-head"><div><h2>Upcoming dispatches</h2><p>Planned, not yet dispatched: assigned trips and load percentages</p></div>${badge(p.schedules.length+' trips','green')}</div><div class="card-body">${tripCards(p.schedules.slice(0,4))||empty('No valid dispatches','Try increasing available fleet capacity.')}</div><div class="toolbar"><button class="button button-link" data-page="planning">Open full dispatch plan →</button></div></div><div><div class="card"><div class="card-head"><div><h2>Demand by corridor</h2><p>Load units planned on each route</p></div></div><div class="card-body">${routeBars()}</div></div><div class="card"><div class="card-head"><div><h2>Recent activity</h2><p>Simulation and live ingestion events</p></div></div><div class="card-body" style="padding-top:3px">${recentEvents(5)}</div></div></div></div>`;}
+function tripsToShow(){return planResult.schedules.filter(s=>routeFilter==='all'||s.routeId===routeFilter).sort((a,b)=>a.depart.localeCompare(b.depart));}
+function tripCards(trips){return trips.map(s=>{const r=P.getRoute(s.routeId),ids=s.orders.map(o=>o.id).join(', '),expand=tripExpanded.has(s.id),ready=s.orders.every(x=>L.getStatus(state.orders.find(o=>o.id===x.id)||{})==='packed'),due=P.dayNumber(s.depart)<=P.dayNumber(P.todayString());return `<article class="trip-card"><div class="trip-top"><div><div class="trip-title"><span class="route-marker" style="display:inline-block;background:${r.color};margin-right:8px"></span>${safe(r.name)} · ${safe(s.truckId)}</div><div class="trip-meta"><span>Depart <b>${fmt(s.depart)}</b></span><span>Return ${fmt(s.returnDate)}</span><span>${s.orders.length} orders</span><span>${money(s.tripCost)}</span></div></div>${badge(s.utilization+'% full',s.utilization>=80?'green':'red')}</div><div class="trip-load"><div class="bar-bg"><div class="bar-fill" style="width:${s.utilization}%"></div></div><span class="subtle nowrap">${s.units}/${s.capacity} load units</span></div><button class="button button-link" data-action="expand-trip" data-trip="${safe(s.id)}">${expand?'Hide manifest':'View order manifest'} ${expand?'↑':'↓'}</button>${ready&&due?`<button class="button button-small button-primary" data-action="dispatch-trip" data-trip="${safe(s.id)}">Mark truck dispatched</button>`:`<span class="small-note" style="margin-left:8px">${!ready?'Some orders are not packed yet': 'Departure is scheduled for a future date'}</span>`}${expand?`<div class="trip-manifest">${s.orders.map(o=>`<div class="space-between"><span>${safe(o.id)} · ${safe(o.destination)} · ${o.units} load units</span><span>Booking End Date ${fmt(o.bid)}</span></div>`).join('')}<div class="small-note" style="margin-top:8px">All stops on the predefined corridor; exact Booking End Date transit time verified by planner.</div></div>`:''}</article>`;}).join('');}
+function renderPlanning(){const tabs=`<div class="pill-tabs">${[{id:'all',text:'All routes'},...P.ROUTES.map(r=>({id:r.id,text:r.name}))].map(x=>`<button class="pill-tab ${routeFilter===x.id?'active':''}" data-action="route-filter" data-route="${x.id}">${x.text}</button>`).join('')}</div>`;
+return heading('Dispatch planning','Calculate departures from each Booking End Date, pack compatible loads and assign available trucks.',`<button class="button" data-action="export-trips">↓ Export schedule</button><button class="button button-primary" data-action="optimize">↗ Optimize now</button>`)+quickKpis()+bookingRiskBanner()+`<div class="grid-two"><section class="card"><div class="card-head"><div><h2>Feasible upcoming truck assignments</h2><p>Each trip has at least 80% utilization and no overlapping truck assignment.</p></div>${badge(planResult.schedules.length+' trips','green')}</div><div class="toolbar">${tabs}</div><div class="card-body">${tripCards(tripsToShow())||empty('No trips found','Try a different route filter or update orders.')}</div></section><aside><div class="card"><div class="card-head"><div><h2>Decision logic</h2><p>The planner follows five steps</p></div></div><div class="card-body">${[['Booking End Date → dispatch date','Subtract destination transit time from requested Booking End Date.'],['Group compatible loads','Match feasible routes and required departures.'],['Select truck size','Choose load fits between 80% and 100%.'],['Protect fleet availability','Never allocate overlapping trips to one truck.'],['Flag impossible orders','Keep unscheduled shipments visible as exceptions.']].map((x,i)=>`<div class="step"><span class="step-no">${i+1}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('')}</div></div><div class="hint warning-hint">The planner is a bounded heuristic for a demo, not a globally optimal 100,000-orders-per-day solver. Transit times and costs in Indian rupees are illustrative.</div></aside></div>`;}
+function orderRows(){
+ const q=orderQuery.trim().toLowerCase();
+ const matches=state.orders.slice().reverse().filter(o=>{
+   const fulfillment=L.getStatus(o),plan=planningStatus(o);
+   const filterMatch=orderFilter==='all'||orderFilter===fulfillment||(orderFilter==='at-risk'&&plan.tone==='orange');
+   const searchMatch=!q||[o.id,o.destination,o.product,o.channel,o.category,o.orderType,fulfillment,plan.name].some(v=>String(v||'').toLowerCase().includes(q));
+   return filterMatch&&searchMatch&&(orderTypeFilter==='all'||(o.orderType||'Standard Order')===orderTypeFilter);
+ });
+ return {orders:matches.slice(0,180),total:matches.length};
+}
+function orderAction(o){
+ const status=L.getStatus(o),next=L.next(o);
+ if(status==='packed'){
+   const detail=planResult.detail.get(o.id);
+   return detail?.status==='scheduled'?`<button type="button" class="button button-small" data-action="dispatch-order-trip" data-id="${safe(o.id)}">Dispatch truck</button>`:'';
+ }
+ if(next&&status!=='delivered')return `<button type="button" class="button button-small button-primary" data-action="advance-order" data-id="${safe(o.id)}">${safe(L.getLabel(next))}</button>`;
+ if(status==='delivered')return `<button type="button" class="button button-small" data-action="return-order" data-id="${safe(o.id)}">Record return</button>`;
+ return '';
+}
+function renderOrders(){
+ const {orders,total}=orderRows();
+ const options=[{id:'all',label:'All order statuses'},...L.PHASES.map(x=>({id:x.id,label:x.label})),{id:'at-risk',label:'Needs dispatch attention'}];
+ return heading('Orders','See every order from placement through delivery, returns and cancellations.',`<button class="button" data-action="import-csv">Import order file</button><button class="button" data-action="export-orders">Export orders</button><button class="button button-primary" data-action="add-order">Create order</button>`)+
+ `<div class="card lifecycle-panel"><div class="card-head"><div><h2>Order lifecycle</h2><p>Scheduled means a departure is planned; it does not mean the order has been dispatched.</p></div></div><div class="card-body">${lifecycleSummary()}</div></div>`+
+ `<div class="card"><div class="toolbar"><div class="toolbar-left"><input id="searchOrders" class="input input-search" type="search" value="${safe(orderQuery)}" placeholder="Search by order, product or city" aria-label="Search orders"><select id="orderTypeFilter" class="select"><option value="all" ${orderTypeFilter==='all'?'selected':''}>All order types</option>${L.TYPES.map(type=>`<option value="${safe(type)}" ${orderTypeFilter===type?'selected':''}>${safe(type)}</option>`).join('')}</select><select id="orderStatusFilter" class="select">${options.map(x=>`<option value="${x.id}" ${orderFilter===x.id?'selected':''}>${x.label}</option>`).join('')}</select></div><span class="subtle">Showing ${orders.length} of ${total} matching orders</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Order / channel</th><th>Product / order type</th><th>Destination</th><th>Load</th><th>Requested Booking End Date</th><th>Order value</th><th>Order status</th><th>Dispatch plan</th><th>Actions</th></tr></thead><tbody>${orders.map(o=>{const status=L.getStatus(o),plan=planningStatus(o);return `<tr data-order="${safe(o.id)}"><td><div class="bold">${safe(o.id)}</div><small class="muted">${safe(o.channel||'Manual')}</small></td><td>${safe(o.product||'General merchandise')}<small class="muted block">${safe(o.orderType||'Standard Order')}</small></td><td>${safe(o.destination)}</td><td>${Number(o.units)} load units</td><td>${fmt(o.bid)}</td><td>${money(o.amount)}</td><td>${badge(L.getLabel(status),L.getTone(status)==='teal'||L.getTone(status)==='purple'?'blue':L.getTone(status))}</td><td>${badge(plan.name,plan.tone)}${status==='packed'&&plan.name==='Dispatch planned'?'<small class="muted block">Ready for dispatch</small>':''}</td><td><div class="table-row-actions"><button type="button" class="button button-small" data-action="order-detail" data-id="${safe(o.id)}">Details</button>${orderAction(o)}${L.isCancellable(o)?`<button type="button" class="button button-small button-quiet-danger" data-action="cancel-order" data-id="${safe(o.id)}">Cancel</button>`:status==='cancelled'?`<button type="button" class="button button-small" data-action="restore-order" data-id="${safe(o.id)}">Restore</button>`:''}</div></td></tr>`;}).join('')}</tbody></table>${!orders.length?empty('No matching orders','Change the order status filter or import orders.'):''}</div></div><div class="small-note">Order status describes the physical fulfillment step. Dispatch plan describes the proposed future truck schedule. Historical demo records are examples, not live Amazon orders.</div>`;
+}
+function renderFulfillment(){
+ const byStatus=status=>state.orders.filter(o=>L.getStatus(o)===status).slice(-6).reverse();
+ const descriptions={placed:'Order received; fulfillment has not started.',processing:'Warehouse is preparing the order.',packed:'Packed and ready for a planned truck.',dispatched:'Truck departure was recorded.',in_transit:'Shipment is on its way.',delivered:'Customer delivery was recorded.',returned:'Customer return was recorded.',cancelled:'Order removed from active planning.'};
+ return heading('Order fulfillment','Track what actually happened after order placement. Planning alone never marks an order as dispatched.',`<button class="button button-primary" data-page="planning">View planned trucks</button>`)+
+ `<div class="card"><div class="card-head"><div><h2>Fulfillment overview</h2><p>Select a stage to see matching orders in the Orders section.</p></div></div><div class="card-body">${lifecycleSummary()}</div></div>`+
+ `<div class="fulfillment-grid">${L.PHASES.map(p=>`<div class="card fulfillment-card"><div class="card-head"><div><h2>${p.label}</h2><p>${descriptions[p.id]}</p></div>${badge(state.orders.filter(o=>L.getStatus(o)===p.id).length,L.getTone(p.id)==='teal'||L.getTone(p.id)==='purple'?'blue':L.getTone(p.id))}</div><div class="card-body">${byStatus(p.id).map(o=>`<div class="fulfillment-row"><div><strong>${safe(o.id)}</strong><small>${safe(o.destination)} · ${safe(o.orderType||'Standard Order')}</small></div><button class="button button-small" data-action="order-detail" data-id="${safe(o.id)}">Details</button></div>`).join('')||`<p class="small-note">No orders at this stage.</p>`}</div></div>`).join('')}</div>`+
+ `<div class="card"><div class="card-head"><div><h2>Recorded truck departures</h2><p>Only trips explicitly marked as dispatched appear here.</p></div></div><div class="card-body">${(state.dispatchHistory||[]).slice().reverse().map(s=>`<div class="log-row"><div><strong>${safe(s.truckId)} · ${safe(s.routeName)}</strong><div class="small-note">Dispatched ${fmt(s.dispatchedAt)} · ${s.orders.length} orders · ${s.utilization}% filled · expected truck return ${fmt(s.returnDate)}</div></div>${badge('Dispatched','blue')}</div>`).join('')||empty('No recorded departures','Pack all orders in a valid trip and mark the truck dispatched in Dispatch Planning.')}</div></div>`+
+ `<div class="hint warning-hint">These stages are controlled by demo actions; they are not live courier scans. Already dispatched trucks are blocked from new assignments until their recorded return date.</div>`;
+}
+
+function renderBooking(){
+ const b=bookingDraftState||{destination:D.CITIES[0],units:40,bid:P.addDays(P.todayString(),9),product:'Mixed retail order'};const defDate=b.bid,destOptions=[...new Set(D.CITIES)].map(c=>`<option ${b.destination===c?'selected':''}>${safe(c)}</option>`).join('');
+ const dateChoices=availableDates.length?`<div class="date-choice-grid">${availableDates.map(d=>`<button class="date-choice" type="button" data-action="choose-available-date" data-date="${d.date}"><strong>${fmt(d.date)}</strong><small>${safe(d.truckType)} vehicle · ${d.utilization}% filled</small><small>Estimated change in trip cost: ${money(d.extraCost)}</small></button>`).join('')}</div>`:'';
+ const availabilityHtml=bookingDateInfo?`<div class="booking-availability"><strong>${safe(bookingDateInfo)}</strong>${dateChoices}${!availableDates.length&&bookingDateInfo.startsWith('No feasible')?'<div style="margin-top:10px"><button class="button" data-action="request-management-review">Request management review</button></div>':''}</div>`:'';
+ return heading('Delivery promise checker','Check the existing orders and available trucks before offering customer delivery dates.',`<button class="button" data-page="planning">See dispatch planning →</button>`)+
+ `<div class="grid-two"><section class="card"><div class="card-head"><div><h2>Find a feasible delivery date</h2><p>Only dates that pass the 80% loading, travel time, existing orders and available vehicle checks are shown as available.</p></div>${badge('Before confirmation','green')}</div><div class="card-body"><div class="field-grid"><div class="field"><label for="promiseCity">Destination city</label><select id="promiseCity" class="select">${destOptions}</select></div><div class="field"><label for="promiseLoad">Estimated load units</label><input id="promiseLoad" type="number" class="input" min="1" max="400" value="${b.units}"></div><div class="field"><label for="promiseBid">Requested Booking End Date</label><input id="promiseBid" class="input" type="date" value="${defDate}"></div><div class="field"><label for="promiseProduct">Product category</label><input id="promiseProduct" class="input" value="${safe(b.product)}"></div></div><p class="small-note">Use Find available delivery dates to offer customers only feasible choices. A manually entered requested date still requires validation.</p><div class="flex" style="margin-top:14px"><button class="button" data-action="find-available-dates" id="availableDatesButton">Find available delivery dates</button><button class="button button-primary" data-action="check-booking" id="bookingCheckButton">Check requested date</button></div>${availabilityHtml}<div id="bookingResultContainer">${bookingResult||''}</div></div></section><aside><div class="card"><div class="card-head"><div><h2>How delivery promises are protected</h2><p>Capacity-aware booking</p></div></div><div class="card-body"><div class="step"><span class="step-no">1</span><div><h4>Check existing orders</h4><p>Evaluate current dispatch loads and customer commitments.</p></div></div><div class="step"><span class="step-no">2</span><div><h4>Check all available vehicle sizes</h4><p>Only consider vehicles that can achieve between 80% and 100% loading and can return without overlapping assignments.</p></div></div><div class="step"><span class="step-no">3</span><div><h4>Offer dates and reserve capacity</h4><p>Show validated delivery dates. On confirmation, save a local planning reservation with the assigned vehicle and dispatch date.</p></div></div><div class="step"><span class="step-no">4</span><div><h4>Escalate conflicts</h4><p>If no option meets all rules, request management review instead of silently breaking the 80% requirement.</p></div></div></div></div><div class="hint warning-hint">This is a local demonstration reservation, not an atomic reservation on a live merchant's truck system. Production needs a central database, locks, confirmed trip capacity, and transaction-safe booking.</div></aside></div>`;
+}
+function renderFleet(){return heading('Fleet management','Different truck capacities, availability and vehicle counts are applied to every dispatch plan.',`<button class="button" data-action="reset-fleet">↺ Restore default fleet</button><button class="button button-primary" data-page="planning">View allocation →</button>`)+`<div class="three-cols">${P.TYPES.map(t=>{const n=state.counts[t.type]||0;return `<div class="card"><div class="card-body"><div class="space-between"><div class="overline">${safe(t.type.toUpperCase())} VEHICLE</div>${badge(`Minimum 80% load`,'green')}</div><div class="kpi-value" style="margin:20px 0 9px">${t.capacity} <span class="subtle">load units</span></div><div class="metric-line"><span class="muted">Minimum dispatch load</span><strong>${t.capacity*.8} load units</strong></div><div class="metric-line"><span class="muted">Base trip cost</span><strong>${money(t.cost)}</strong></div><div class="divide"></div><div class="space-between"><span class="bold">Available vehicles</span><div class="counter" role="group" aria-label="Available ${safe(t.type)} vehicles"><button type="button" class="fleet-step-button" data-action="fleet-dec" data-type="${t.type}" aria-label="Decrease available ${safe(t.type)} vehicles" title="Remove one ${safe(t.type)} vehicle" ${n<=busyTrucks().filter(x=>x.truckId.startsWith(t.type[0]+'-')&&P.dayNumber(x.returnDate)>P.dayNumber(P.todayString())).length?'disabled':''}>−</button><strong aria-live="polite" aria-label="${n} available ${safe(t.type)} vehicles">${n}</strong><button type="button" class="fleet-step-button" data-action="fleet-inc" data-type="${t.type}" aria-label="Increase available ${safe(t.type)} vehicles" title="Add one ${safe(t.type)} vehicle" ${n>=20?'disabled':''}>+</button></div></div></div></div>`;}).join('')}</div><div class="card"><div class="card-head"><div><h2>Vehicle assignments</h2><p>Same vehicle cannot be assigned to overlapping route trips.</p></div>${badge('Fleet checked','green')}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Vehicle</th><th>Type</th><th>Assigned route</th><th>Departure</th><th>Available after</th><th>Fill</th></tr></thead><tbody>${planResult.schedules.map(s=>`<tr><td class="bold">${safe(s.truckId)}</td><td>${safe(s.truckType)}</td><td>${safe(s.routeName)}</td><td>${fmt(s.depart)}</td><td>${fmt(s.returnDate)}</td><td>${badge(s.utilization+'%','green')}</td></tr>`).join('')}</tbody></table>${!planResult.schedules.length?empty('No truck assignments','Increase vehicle counts or add compatible demand.'):''}</div></div>`;}
+function renderRoutes(){return heading('Route network','Three fixed road corridors from Guwahati. Edit simulated transit days or route cost factors to test decisions.',`<button class="button" data-action="reset-routes">↺ Reset route assumptions</button>`)+`<div class="three-cols">${P.ROUTES.map(r=>`<div class="card"><div class="card-body"><div class="flex"><span class="route-marker" style="background:${r.color}"></span><strong>${safe(r.name)}</strong></div><div class="overline" style="margin:17px 0 6px">TRANSIT STOPS</div><div class="route-stops">${r.stops.map(([city,days])=>`<span class="stop">${safe(city)} <b>${days} days</b></span>`).join('<span class="subtle">→</span>')}</div><div class="divide"></div><div class="metric-line"><span class="muted">Round trip</span><strong>${r.roundTripDays} days</strong></div><div class="metric-line"><span class="muted">Trip cost multiplier</span><strong>${r.factor}×</strong></div><button class="button" style="margin-top:15px" data-action="edit-route" data-route="${r.id}">Edit assumptions</button></div></div>`).join('')}</div><div class="hint warning-hint"><strong>Important:</strong> Transit durations and route factors are editable demo assumptions. Actual driver hours, traffic, tolls and lane schedules need validated operational data. Jaipur, Bhopal and Chandigarh are representative cities.</div>`;}
+function renderLive(){const isOn=!!timer;
+return heading('Order data sources','Online sample data and a local order feed, clearly separated from test arrivals.',`<button class="button" data-action="inject-order">Add test arrival</button><button class="button button-primary" data-action="toggle-stream">${isOn?'Pause updates':'Start updates'}</button>`)+
+`<div class="grid-two"><div><div class="card"><div class="card-head"><div><h2>Connect a data source</h2><p>Choose how orders enter the planning system.</p></div>${badge(isOn?'Updates on':'Paused',isOn?'green':'gray')}</div>
+<div class="card-body"><div class="field-grid"><div class="field"><label for="feedMode">Source</label><select class="select" id="feedMode">
+<option value="sim" ${streamMode==='sim'?'selected':''}>Simulated test orders</option><option value="public" ${streamMode==='public'?'selected':''}>DummyJSON sample online data service</option>
+<option value="inbound" ${streamMode==='inbound'?'selected':''}>Connected store / incoming order service</option></select></div>
+<div class="field"><label for="feedRate">Refresh interval</label><select class="select" id="feedRate" ${streamMode==='public'?'disabled':''}>${streamMode==='public'?'<option value="60000">Every 60 seconds</option>':`<option value="3000" ${streamMs===3000?'selected':''}>Three seconds</option><option value="4500" ${streamMs===4500?'selected':''}>Four and a half seconds</option><option value="8000" ${streamMs===8000?'selected':''}>Eight seconds</option>`}</select></div></div>
+<div class="hint" style="margin-top:15px">${streamMode==='public'?'Sample online data service mode checks for NEW sample cart identifiers every 60 seconds, and never invents new purchases.':streamMode==='inbound'?'Inbound mode polls your local server for new authenticated order events.':'Simulation mode generates a new hypothetical order every few seconds.'}</div>
+<div class="divide"></div><div class="metric-line"><span>Server connection</span><strong>${serverAvailable?'Connected (local)':'Offline / not started'}</strong></div>
+<div class="metric-line"><span>Update process</span><strong>${isOn?'Running':'Stopped'}</strong></div>
+<div class="flex" style="margin-top:16px"><button class="button" data-action="fetch-carts" ${publicBusy?'disabled':''}>${publicBusy?'Fetching…':'Fetch sample carts now'}</button><button class="button" data-action="poll-inbound">Check inbound orders</button></div>
+</div></div><div class="card"><div class="card-head"><div><h2>Public e-commerce dataset</h2><p>DummyJSON · free example shopping carts</p></div>${badge('Sample, not sales','gray')}</div>
+<div class="card-body"><div class="metric-line"><span>Connection status</span><strong>${safe(publicStatus)}</strong></div><div class="metric-line"><span>Last checked</span><strong>${publicLastSync?new Date(publicLastSync).toLocaleString('en-IN'):'Not yet'}</strong></div>
+<div class="metric-line"><span>Carts found</span><strong>${publicCount}</strong></div><div class="metric-line"><span>New orders added (last fetch)</span><strong>${publicAdded}</strong></div>
+${publicError?`<div class="statusbox fail">${safe(publicError)}</div>`:''}
+<p class="small-note">Live web request from <a href="https://dummyjson.com/docs/carts" target="_blank" rel="noreferrer">DummyJSON carts Application Programming Interface</a>. Product names, quantities and totals come from the data service. India delivery cities, Booking End Date, load units and illustrative Indian rupee values are mapped for this demonstration. The data service provides fixed mock data, not live Amazon transactions.</p></div></div></div>
+<div><div class="card"><div class="card-head"><div><h2>Recent order activity</h2><p>Imported, simulated and manual events</p></div>${badge(state.events.length+' events')}</div><div class="card-body scrollable" style="padding-top:3px">${recentEvents(18)}</div></div>
+<div class="card"><div class="card-head"><div><h2>Actual store order integration</h2><p>Optional local server</p></div></div><div class="card-body"><div class="step"><span class="step-no">1</span><div><h4>Start the server</h4><p>Set an integration access key and run <code>python server.py</code>.</p></div></div><div class="step"><span class="step-no">2</span><div><h4>Send orders</h4><p>POST to <code>/api/orders</code> with <code>X-DispatchIQ-Key</code> and order identifier, city, units, Booking End Date.</p></div></div>
+<div class="step"><span class="step-no">3</span><div><h4>See changes</h4><p>Choose inbound source and start updates. New events appear in the order list and are replanned.</p></div></div>
+<p class="small-note">Real Amazon orders require authorized Selling Partner Application Programming Interface credentials. This demo has no Amazon store connected. See the project instructions for tested setup and integration examples.</p></div></div></div></div>`;}
+function renderAnalytics(){const r=routeSummary(),p=planResult, orders=activeOrders(),allAmount=orders.reduce((s,o)=>s+Number(o.amount||0),0),atRiskAmount=p.unscheduled.reduce((s,o)=>s+Number(o.amount||0),0);return heading('Business metrics','Look beyond fill rate: monitor delivery coverage, shipment exposure and projected trip costs.',`<button class="button" data-action="export-report">↓ Download analytics report</button>`)+`<div class="stat-grid">${stat('Total sample gross merchandise value',money(allAmount),'Illustrative retail order values')}${stat('Value of orders at risk',money(atRiskAmount),'Not lost revenue; exposure only',p.unscheduled.length?'orange':'teal')}${stat('Planned trip cost',money(p.cost),'Assumed costs')}${stat('Average fill',p.overallUtil+'%','Scheduled vehicles')}${stat('Booking End Date coverage',p.coverage+'%','On-time feasible plans')}</div><div class="grid-half"><div class="card"><div class="card-head"><div><h2>Planned load by corridor</h2><p>Scheduled shipment units</p></div></div><div class="card-body">${routeBars()}</div></div><div class="card"><div class="card-head"><div><h2>Trip costs by corridor</h2><p>Illustrative transportation costs in Indian rupees</p></div></div><div class="card-body">${r.map(({r,cost})=>`<div class="chart-row"><label>${safe(r.name)}</label><div class="bar-bg"><div class="bar-fill" style="background:${r.color};width:${Math.round(cost/Math.max(1,...routeSummary().map(x=>x.cost))*100)}%"></div></div><strong>${money(cost)}</strong></div>`).join('')}</div></div></div><div class="card"><div class="card-head"><div><h2>Executive risk summary</h2><p>Quantities you can discuss with Sir without overstating financial impact.</p></div></div><div class="card-body"><div class="grid-half"><div><div class="metric-line"><span>Orders with feasible schedule</span><strong>${p.scheduledOrders}</strong></div><div class="metric-line"><span>Orders not scheduled</span><strong>${p.unscheduled.length}</strong></div><div class="metric-line"><span>Scheduled load units</span><strong>${p.deliveredUnits}</strong></div></div><div><div class="metric-line"><span>Upcoming truck trips</span><strong>${p.schedules.length}</strong></div><div class="metric-line"><span>Fleet count</span><strong>${Object.values(state.counts).reduce((a,b)=>a+b,0)}</strong></div><div class="metric-line"><span>Order data source</span><strong>Mixed demo/sample</strong></div></div></div><div class="hint warning-hint" style="margin-top:14px">Order value is NOT profit. These numbers do not include fuel invoices, inventory carrying costs, real penalties or customer lifetime value. Do not interpret sample GMV as actual business revenue.</div></div></div>`;}
+function renderExceptions(){return heading('Exceptions & delivery risk','See exactly which orders cannot meet Booking End Date and 80% truck fill with the current fleet.',`<button class="button" data-action="optimize">↺ Re-check feasibility</button>`)+`<div class="grid-half"><div class="card"><div class="card-head"><div><h2>At-risk orders</h2><p>Priority review list</p></div>${badge(planResult.unscheduled.length+' flagged',planResult.unscheduled.length?'orange':'green')}</div><div class="card-body">${planResult.unscheduled.map(o=>`<div class="log-row"><div><strong>${safe(o.id)} · ${safe(o.destination)}</strong><p class="small-note">${safe(o.reason)}<br>Booking End Date ${fmt(o.bid)} · ${o.units} load units</p></div><button class="button button-small" data-action="resolve" data-id="${safe(o.id)}">Try consolidation</button></div>`).join('')||empty('No exceptions','All active demo orders currently have feasible dispatches.')}</div></div><div class="card"><div class="card-head"><div><h2>Business impact and action</h2><p>Illustrative risk playbook</p></div></div><div class="card-body"><div class="step"><span class="step-no">1</span><div><h4>Not enough compatible load</h4><p>Check whether already-available orders or a smaller truck can achieve 80% without moving any Booking End Date.</p></div></div><div class="step"><span class="step-no">2</span><div><h4>No free vehicle</h4><p>Check future commitments and assign extra capacity only if permitted by the business.</p></div></div><div class="step"><span class="step-no">3</span><div><h4>Impossible customer date</h4><p>Do not promise the date. Offer a feasible choice before order confirmation.</p></div></div><div class="step"><span class="step-no">4</span><div><h4>Rule conflict</h4><p>If all requirements cannot hold simultaneously, flag for human management decision.</p></div></div></div></div></div><div class="card" style="margin-top:15px"><div class="card-head"><div><h2>Management review requests</h2><p>Requests are recorded for a person to decide; no promise is automatically approved.</p></div>${badge((state.reviews||[]).filter(x=>x.status==='Open').length+' open')}</div><div class="card-body">${(state.reviews||[]).map(x=>`<div class="log-row"><div><strong>${safe(x.destination)} · ${x.units} load units</strong><p class="small-note">Requested ${fmt(x.bid)} · ${safe(x.reason)}<br>Status: ${safe(x.status)}</p></div>${x.status==='Open'?`<button class="button button-small" data-action="mark-reviewed" data-id="${safe(x.id)}">Mark reviewed</button>`:''}</div>`).join('')||empty('No management reviews','Unresolved booking requests will appear here.')}</div></div></div>`;}
+function renderFleetExtra(){
+ const now=P.dayNumber(P.todayString());
+ const away=(state.dispatchHistory||[]).filter(s=>P.dayNumber(s.returnDate)>now);
+ return `<div class="card" style="margin-top:16px"><div class="card-head"><div><h2>Dispatched vehicles currently unavailable</h2><p>Actual demo departures continue occupying vehicle capacity until their recorded return date.</p></div>${badge(away.length+' vehicles','blue')}</div><div class="card-body">${away.map(s=>`<div class="metric-line"><span><strong>${safe(s.truckId)}</strong> · ${safe(s.routeName)} · ${s.orders.length} orders</span><strong>Available after ${fmt(s.returnDate)}</strong></div>`).join('')||empty('No vehicles on recorded trips','Future assignments use the available fleet counts.')}</div></div>`;
+}
+function renderOrderAnalytics(){
+ const total=state.orders.length||1;
+ const types=L.TYPES.map(t=>({type:t,n:state.orders.filter(o=>(o.orderType||'Standard Order')===t).length}));
+ return `<div class="grid-half"><div class="card"><div class="card-head"><div><h2>Orders by fulfillment stage</h2><p>Physical order progress, not planned trips.</p></div></div><div class="card-body">${lifecycleCounts().map(x=>`<div class="metric-line"><span>${x.label}</span><strong>${x.count}</strong></div>`).join('')}</div></div><div class="card"><div class="card-head"><div><h2>Orders by type</h2><p>Illustrative ecommerce order categories.</p></div></div><div class="card-body">${types.map(x=>`<div class="chart-row"><label>${x.type}</label><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(x.n/total*100)}%"></div></div><strong>${x.n}</strong></div>`).join('')}</div></div></div>`;
+}
+function updateNav(){document.querySelector('#navOrderCount').textContent=String(state.orders.length);document.querySelector('#navExceptionCount').textContent=String(planResult?.unscheduled.length||0);document.querySelector('#sourceIndicator').innerHTML=`<span class="pulse"></span> ${timer?(streamMode==='inbound'?'Inbound polling':streamMode==='public'?'Sample online data service refresh':'Demo stream'):'Demo workspace'}`;}
+function render(){document.querySelector('#pageBody').innerHTML=({overview:renderOverview,orders:renderOrders,fulfillment:renderFulfillment,planning:renderPlanning,booking:renderBooking,fleet:()=>renderFleet()+renderFleetExtra(),routes:renderRoutes,live:renderLive,analytics:()=>renderAnalytics()+renderOrderAnalytics(),exceptions:renderExceptions}[view])();document.querySelector('#pageCrumb').textContent=names[view];document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===view));updateNav();}
+function go(page){if(!names[page])return;view=page;bookingResult=null;checkedBooking=null;document.querySelector('#sidebar').classList.remove('open');render();window.scrollTo({top:0,behavior:'instant'});}
+function download(name,text,mime='text/plain'){const blob=new Blob([text],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1200);}
+function validOrder(o,existing=state.orders){if(o.fulfillmentStatus&&!L.PHASES.some(x=>x.id===o.fulfillmentStatus))return 'Unknown order fulfillment status';if(!String(o.id||'').trim())return 'Order identifier required';if(existing.some(x=>String(x.id)===String(o.id)))return 'Duplicate order identifier';if(!D.CITIES.includes(o.destination))return 'Destination must be on a predefined route';if(!Number.isInteger(Number(o.units))||Number(o.units)<=0||Number(o.units)>400)return 'Load must be a whole number between 1 and 400';if(!/^\d{4}-\d{2}-\d{2}$/.test(o.bid)||!Number.isFinite(P.dayNumber(o.bid)))return 'Enter a valid requested Booking End Date';return '';}
+function addOrder(o,eventType='Order added'){o.fulfillmentStatus=o.fulfillmentStatus||'placed';o.orderType=o.orderType||'Standard Order';const err=validOrder(o);if(err){toast(err,true);return false;}state.orders.push({...o,units:Number(o.units),amount:Number(o.amount)||0,receivedAt:o.receivedAt||new Date().toISOString()});note(eventType,`${o.id} • ${o.destination} • Booking End Date ${o.bid} • ${o.units} load units`);replan();render();return true;}
+function modal(html){document.querySelector('#modalRoot').innerHTML=`<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;}
+function closeModal(){document.querySelector('#modalRoot').innerHTML='';}
+function showNewOrder(){modal(`<div class="modal-head"><h2>Create e-commerce order</h2><button type="button" class="icon-button" data-action="close-modal" aria-label="Close dialog">×</button></div><form id="createOrderForm"><div class="modal-body"><div class="field-grid"><div class="field"><label>Order identifier</label><input class="input" name="id" required value="NEW-${Date.now().toString(36).toUpperCase()}"></div><div class="field"><label>Destination</label><select class="select" name="destination">${[...new Set(D.CITIES)].map(c=>`<option>${safe(c)}</option>`).join('')}</select></div><div class="field"><label>Load units</label><input class="input" type="number" min="1" max="400" required name="units" value="80"></div><div class="field"><label>Requested Booking End Date</label><input class="input" type="date" required name="bid" value="${P.addDays(P.todayString(),8)}"></div><div class="field"><label>Order type</label><select class="select" name="orderType">${L.TYPES.map(x=>`<option>${safe(x)}</option>`).join('')}</select></div><div class="field"><label>Product</label><input class="input" name="product" value="General merchandise"></div><div class="field"><label>Order value (₹)</label><input class="input" type="number" min="0" name="amount" value="3500"></div></div><p class="small-note">This creates a test/demo order, not a real ecommerce platform transaction.</p><div id="newOrderError" class="form-error"></div></div><div class="modal-footer"><button class="button" type="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">Add to planner</button></div></form>`);}
+function showDetail(id){const o=state.orders.find(x=>x.id===id);if(!o)return;const info=planResult.detail.get(id),status=orderStatus(o);modal(`<div class="modal-head"><h2>Order ${safe(o.id)}</h2><button type="button" class="icon-button" data-action="close-modal" aria-label="Close dialog">×</button></div><div class="modal-body"><div class="field-grid">${[['Product',o.product],['Destination',o.destination],['Requested Booking End Date',o.bid],['Load',o.units+' load units'],['Order type',o.orderType||'Standard Order'],['Channel',o.channel],['Order value',money(o.amount)],['Fulfillment status',L.getLabel(status)],['Dispatch planning',planningStatus(o).name],['Departure',info?.depart||'Not scheduled'],['Route',P.getRoute(info?.routeId)?.name||'—'],['Truck',info?.truckId||'—'],['Recorded shipment',o.shipment?('Vehicle '+o.shipment.truckId+' on '+fmt(o.shipment.dispatchedAt)):'Not dispatched'],['Planning reservation',o.confirmedBooking?('Recorded on '+fmt(o.confirmedAt)+', vehicle '+(o.reservation?.truckId||'replanned')):'Not reserved']].map(([k,v])=>`<div class="field"><label>${k}</label><div class="bold">${safe(v||'—')}</div></div>`).join('')}</div>${info?.reason?`<div class="statusbox fail">${safe(info.reason)}</div>`:''}</div><div class="modal-footer"><button type="button" class="button" data-action="close-modal">Close</button>${L.isCancellable(o)?`<button type="button" class="button button-danger" data-action="cancel-order" data-id="${safe(o.id)}">Cancel test order</button>`:(status==='cancelled'?`<button type="button" class="button" data-action="restore-order" data-id="${safe(o.id)}">Restore test order</button>`:'')}</div>`);}
+function showCancelDialog(id){
+ const o=state.orders.find(x=>x.id===id);
+ if(!o||!L.isCancellable(o)){toast('Order is already cancelled or cannot be found.',true);return;}
+ modal(`<div class="modal-head"><h2>Cancel test order?</h2><button type="button" class="icon-button" data-action="close-modal" aria-label="Close dialog">×</button></div><div class="modal-body"><p class="modal-message">Order <strong>${safe(o.id)}</strong> will be removed from active planning. Its delivery allocation will be recalculated. You can restore the order later if needed.</p></div><div class="modal-footer"><button type="button" class="button" data-action="close-modal">Keep order</button><button type="button" class="button button-danger" data-action="confirm-cancel-order" data-id="${safe(o.id)}">Confirm cancellation</button></div>`);
+}
+function updateOrderCancellation(id,cancelled){
+ const o=state.orders.find(x=>x.id===id);
+ if(!o){toast('Order not found.',true);closeModal();return;}
+ if(o.cancelled===cancelled){toast(cancelled?'Order is already cancelled.':'Order is already active.',true);closeModal();return;}
+ if(cancelled && !L.isCancellable(o)){toast('Dispatched or delivered orders cannot be cancelled. Record a return instead.',true);closeModal();return;}
+ if(cancelled)o.cancelledFromStatus=L.getStatus(o);
+ o.fulfillmentStatus=cancelled?'cancelled':(o.cancelledFromStatus||'placed');
+ o.cancelled=cancelled;
+ note(cancelled?'Order cancelled':'Order restored',`${id} ${cancelled?'cancelled':'restored'}`);
+ replan();closeModal();render();
+ toast(cancelled?'Order cancelled. Dispatch plan updated.':'Order restored. Dispatch plan updated.');
+}
+function showRouteEditor(routeId){const r=P.getRoute(routeId);if(!r)return;modal(`<div class="modal-head"><h2>Edit ${safe(r.name)}</h2><button type="button" class="icon-button" data-action="close-modal" aria-label="Close dialog">×</button></div><form id="routeForm" data-route="${safe(r.id)}"><div class="modal-body"><div class="field-grid"><div class="field"><label>Round-trip duration (days)</label><input class="input" type="number" name="roundTripDays" min="1" max="90" value="${r.roundTripDays}" required></div><div class="field"><label>Trip cost factor</label><input class="input" type="number" step="0.01" name="factor" min="0.2" max="5" value="${r.factor}" required></div>${r.stops.map(([city,days],i)=>`<div class="field"><label>${safe(city)} transit (days)</label><input class="input" type="number" min="1" max="80" name="stop${i}" value="${days}" required></div>`).join('')}</div><p class="small-note">Changing route timing can change order feasibility. These are example assumptions, not verified driving times.</p><div id="routeFormError" class="form-error"></div></div><div class="modal-footer"><button type="button" class="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">Apply route assumptions</button></div></form>`);}
+function bookingDraft(date){return {id:'BOOK-'+Date.now()+'-'+Math.floor(Math.random()*10000),destination:document.querySelector('#promiseCity').value,units:Number(document.querySelector('#promiseLoad').value),bid:date||document.querySelector('#promiseBid').value,product:document.querySelector('#promiseProduct').value,category:'Mixed',amount:0,channel:'Delivery Promise',source:'Demo booking checker'};}
+function showBookingResult(html){bookingResult=html;const existing=document.querySelector('#bookingResultContainer');if(existing)existing.innerHTML=html;else document.querySelector('#bookingCheckButton').insertAdjacentHTML('afterend',`<div id="bookingResultContainer">${html}</div>`);}
+function doBooking(){
+ const order=bookingDraft(), err=validOrder(order),result=err?null:P.evaluateBooking(plannableOrders(),state.counts,order,P.todayString(),busyTrucks());
+ checkedBooking=result?.accepted?order:null;
+ const trip=result?.accepted?result.next.schedules.find(s=>s.orders.some(o=>o.id===order.id)):null;
+ showBookingResult(err?`<div class="statusbox fail">${safe(err)}</div>`:result.accepted?`<div class="statusbox"><strong>This delivery date is feasible.</strong><br>Available vehicle: ${safe(trip.truckType)} · ${trip.utilization}% loaded · departure ${fmt(trip.depart)}. Existing scheduled orders are protected at the time of this check.<div style="margin-top:12px"><button class="button button-primary" data-action="confirm-booking">Confirm and record capacity reservation</button></div></div>`:`<div class="statusbox fail"><strong>Cannot confirm this Booking End Date.</strong><br>${safe(result.reason)}<br><small>Try available dates, a smaller vehicle if available, or request management review.</small><div style="margin-top:10px"><button class="button" data-action="request-management-review">Request management review</button></div></div>`);
+}
+function findAvailableDates(){
+ const draft=bookingDraft();bookingDraftState={destination:draft.destination,units:draft.units,bid:draft.bid,product:draft.product};const validation=validOrder({...draft,bid:P.addDays(P.todayString(),9)});
+ if(validation){availableDates=[];bookingDateInfo=validation;render();return;}
+ const current=plannableOrders(),today=P.todayString(),results=[];
+ for(let offset=1;offset<=21;offset++){
+  const date=P.addDays(today,offset),order={...draft,id:'DATE-PREVIEW-NEW',bid:date};
+  if(current.some(o=>o.id===order.id))order.id+='-CHECK';
+  const check=P.evaluateBooking(current,state.counts,order,today,busyTrucks());
+  if(!check.accepted)continue;
+  const trip=check.next.schedules.find(s=>s.orders.some(o=>o.id===order.id));
+  if(trip)results.push({date,truckType:trip.truckType,utilization:trip.utilization,extraCost:check.next.cost-check.current.cost});
+ }
+ availableDates=results;
+ bookingDateInfo=results.length?`${results.length} feasible delivery date(s) found in the next 21 days. Choose one below.`:'No feasible delivery dates in the next 21 days under current fleet and 80% loading rules.';
+ checkedBooking=null;bookingResult=null;render();
+}
+function requestManagementReview(){
+ const order=bookingDraft(),err=validOrder(order);
+ if(err){toast(err,true);return;}
+ const current=P.evaluateBooking(plannableOrders(),state.counts,order,P.todayString(),busyTrucks());
+ if(current.accepted){toast('Requested date is feasible. Please confirm the booking instead.',true);return;}
+ state.reviews=state.reviews||[];
+ state.reviews.unshift({id:'REVIEW-'+Date.now(),destination:order.destination,units:order.units,bid:order.bid,reason:current.reason,requestedAt:new Date().toISOString(),status:'Open'});
+ note('Management review requested',`${order.destination} • ${order.units} load units • ${order.bid}`);
+ persist();view='exceptions';render();toast('Management review request recorded. No delivery date has been promised.');
+}
+async function fetchPublicCarts(){if(publicBusy)return;publicBusy=true;publicError='';publicStatus='Connecting';if(view==='live')render();
+ try{let json=null;let url='https://dummyjson.com/carts?limit=30';
+  if(serverAvailable){try{const r=await fetch('/api/public-carts',{cache:'no-store',signal:AbortSignal.timeout(12000)});if(r.ok)json=await r.json();}catch(e){/* try direct source */}}
+  if(!json){const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('HTTP '+r.status);json=await r.json();}
+  if(!Array.isArray(json.carts))throw Error('Unexpected response from sample online data service');
+  publicCount=json.carts.length;publicLastSync=new Date().toISOString();publicStatus='Online sample online data service';
+  const items=json.carts.map((cart,i)=>D.fromCart(cart,i));let added=0;
+  for(const o of items){if(state.orders.length>=350)break;if(addOrderQuiet(o))added++;}
+  publicAdded=added;note('Sample data fetch',`${publicCount} sample carts retrieved; ${added} new demo shipments imported`);if(added)replan();
+  toast(added?`${added} sample carts imported and planned`:'Sample online data service checked. No new cart identifiers.');
+ }catch(e){publicStatus='Unavailable';publicError='Cannot reach sample online data service: '+e.message+'. Internet is required. You can still use the offline demo orders.';toast('Sample online data service unavailable; offline demo still works',true);note('Source error',publicError);}finally{publicBusy=false;if(view==='live'||view==='overview'||view==='orders')render();}}
+async function checkServer(){if(!/^https?:$/.test(location.protocol)){serverAvailable=false;return;}try{const r=await fetch('/api/health',{cache:'no-store',signal:AbortSignal.timeout(1500)});const j=await r.json();serverAvailable=!!(r.ok&&j.app==='DispatchIQ Pro');}catch(e){serverAvailable=false;}}
+async function pollInbound(){if(!serverAvailable){await checkServer();if(!serverAvailable){if(view==='live')toast('Start the local Python server using server.py to use incoming order service.',true);return;}}
+ try{const r=await fetch('/api/updates?after='+inboundCursor,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const j=await r.json();let added=0;for(const entry of j.events||[]){inboundCursor=Math.max(inboundCursor,entry.seq);const o=entry.order;if(!state.orders.some(x=>x.id===o.id)){if(addOrderQuiet(o)){added++;}}}if(added){note('Live inbound',`${added} order(s) imported through authenticated Application Programming Interface`);replan();render();toast(`${added} incoming order(s) received`);}else if(view==='live')render();}catch(e){toast('Inbound poll failed: '+e.message,true);}}
+function addOrderQuiet(o){o.fulfillmentStatus=o.fulfillmentStatus||'placed';o.orderType=o.orderType||'Standard Order';if(validOrder(o))return false;state.orders.push({...o,receivedAt:o.receivedAt||new Date().toISOString()});return true;}
+function feedTick(){if(streamMode==='inbound'){pollInbound();return;}
+ if(streamMode==='public'){fetchPublicCarts();return;}
+ const o=D.simulateOrder(state.orders);if(addOrder(o,'Simulated incoming order'))toast(`Test order ${o.id} added`);
+}
+function stopStream(){if(timer){clearInterval(timer);timer=null;}}
+function restartStream(){stopStream();if(streamMode==='inbound'&&!serverAvailable){toast('Start the local Python server using server.py to receive actual incoming orders.',true);render();return;}
+ if(streamMode==='public')fetchPublicCarts();
+ timer=setInterval(feedTick,streamMode==='public'?60000:streamMs);
+ note('Feed started',streamMode==='sim'?'Simulated arrivals started':streamMode==='public'?'Public sample online data service refresh enabled (60 seconds)':'Inbound polling started');render();}
+function resetDemo(){bookingDraftState=null;stopStream();state={orders:D.seed(),counts:{...DEFAULT_COUNTS},events:[],reviews:[],dispatchHistory:[],scenario:'normal',autoRun:true};orderQuery='';orderFilter='all';orderTypeFilter='all';bookingResult=null;checkedBooking=null;routeFilter='all';pendingCarts=[];P.ROUTES.forEach((r,i)=>{const a=[{days:[2,3,4,5,6,7],factor:1.10,roundTrip:16},{days:[2,3,5],factor:.93,roundTrip:12},{days:[1,2,5,7],factor:1.28,roundTrip:16}][i];r.factor=a.factor;r.roundTripDays=a.roundTrip;r.stops.forEach((s,j)=>s[1]=a.days[j]);});saveRouteConfig();note('Demo reset','Illustrative baseline restored');replan();render();toast('Baseline dataset restored');}
+function advanceOrder(id){
+ const o=state.orders.find(x=>x.id===id);if(!o){toast('Order not found',true);return;}
+ const current=L.getStatus(o),next=L.next(o);
+ if(!next||current==='delivered'){toast('There is no next processing step for this order.',true);return;}
+ o.fulfillmentStatus=next;
+ if(next==='in_transit')o.inTransitAt=new Date().toISOString();
+ if(next==='delivered')o.deliveredAt=new Date().toISOString();
+ note('Fulfillment updated',`${id}: ${L.getLabel(current)} → ${L.getLabel(next)}`);
+ replan();render();toast(`Order marked ${L.getLabel(next)}`);
+}
+function dispatchTrip(tripId){
+ const trip=planResult.schedules.find(t=>t.id===tripId);
+ if(!trip){toast('Trip is no longer in the current dispatch plan. Recalculate and try again.',true);return;}
+ if(trip.utilization<80||trip.utilization>100){toast('Dispatch blocked: vehicle must be between 80% and 100% loaded.',true);return;}
+ if(P.dayNumber(trip.depart)>P.dayNumber(P.todayString())){toast(`Truck departure is planned for ${fmt(trip.depart)}. You cannot dispatch it early.`,true);return;}
+ const orders=trip.orders.map(x=>state.orders.find(o=>o.id===x.id));
+ if(orders.some(o=>!o||L.getStatus(o)!=='packed')){toast('All orders on this truck must be packed before dispatch.',true);return;}
+ const time=new Date().toISOString();
+ state.dispatchHistory=state.dispatchHistory||[];
+ state.dispatchHistory.push({...trip,dispatchedAt:time});
+ for(const o of orders){o.fulfillmentStatus='dispatched';o.dispatchedAt=time;o.shipment={tripId:trip.id,truckId:trip.truckId,routeName:trip.routeName,dispatchedAt:time,depart:trip.depart,returnDate:trip.returnDate};}
+ note('Truck dispatched',`${trip.truckId} left for ${trip.routeName} carrying ${orders.length} packed orders at ${trip.utilization}% loading`);
+ replan();render();toast(`Truck ${trip.truckId} dispatched. ${orders.length} orders updated.`);
+}
+function requestReturn(id){
+ const o=state.orders.find(x=>x.id===id);
+ if(!o||L.getStatus(o)!=='delivered'){toast('Only delivered orders can be marked as returned.',true);return;}
+ modal(`<div class="modal-head"><h2>Record customer return?</h2><button type="button" class="icon-button" data-action="close-modal">×</button></div><div class="modal-body"><p>Order ${safe(o.id)} was delivered. Confirming a return changes its order status to Returned; this does not create a separate reverse logistics truck trip.</p></div><div class="modal-footer"><button class="button" data-action="close-modal">Keep delivered</button><button class="button button-primary" data-action="confirm-return" data-id="${safe(id)}">Record return</button></div>`);
+}
+function applyAction(action,button){const id=button.dataset.id,t=button.dataset.type;switch(action){
+ case'optimize':replan();note('Planner run',`${planResult.scheduledOrders}/${planResult.totalOrders} orders scheduled across ${planResult.schedules.length} trips`);render();toast('Dispatch plan recalculated');break;
+ case'reset':if(confirm('Reset orders, fleet and activity log to initial demo data?'))resetDemo();break;
+ case'add-order':showNewOrder();break;
+ case'close-modal':closeModal();break;
+ case'order-detail':showDetail(id);break;
+ case'lifecycle-filter':orderFilter=button.dataset.filter;go('orders');break;
+ case'advance-order':advanceOrder(id);break;
+ case'dispatch-trip':dispatchTrip(button.dataset.trip);break;
+ case'dispatch-order-trip':{const tripId=planResult.detail.get(id)?.tripId;if(tripId)dispatchTrip(tripId);else toast('No valid truck assignment for this order.',true);break;}
+ case'return-order':requestReturn(id);break;
+ case'confirm-return':{const o=state.orders.find(x=>x.id===id);if(o&&L.getStatus(o)==='delivered'){o.fulfillmentStatus='returned';o.returnedAt=new Date().toISOString();note('Return recorded',id);replan();closeModal();render();toast('Customer return recorded.');}break;}
+
+ case'cancel-order':showCancelDialog(id);break;
+ case'confirm-cancel-order':updateOrderCancellation(id,true);break;
+ case'restore-order':updateOrderCancellation(id,false);break;
+ case'fleet-inc':case'fleet-dec':{const nextCount=Math.max(0,Math.min(20,(state.counts[t]||0)+(action==='fleet-inc'?1:-1)));const busyCount=busyTrucks().filter(x=>x.truckId.startsWith(t[0]+'-')&&P.dayNumber(x.returnDate)>P.dayNumber(P.todayString())).length;if(nextCount<busyCount){toast('Cannot remove a vehicle while it is out on a dispatched trip.',true);break;}state.counts[t]=nextCount;note('Fleet updated',`${t} trucks: ${state.counts[t]}`);replan();render();break;}
+ case'reset-fleet':state.counts={...DEFAULT_COUNTS};note('Fleet reset','Default vehicle counts restored');replan();render();break;
+ case'edit-route':showRouteEditor(button.dataset.route);break;
+ case'reset-routes':{const base=[{days:[2,3,4,5,6,7],factor:1.10,roundTrip:16},{days:[2,3,5],factor:.93,roundTrip:12},{days:[1,2,5,7],factor:1.28,roundTrip:16}];P.ROUTES.forEach((r,i)=>{r.factor=base[i].factor;r.roundTripDays=base[i].roundTrip;r.stops.forEach((s,j)=>s[1]=base[i].days[j]);});saveRouteConfig();note('Route reset','Original timing assumptions restored');replan();render();break;}
+ case'expand-trip':tripExpanded.has(button.dataset.trip)?tripExpanded.delete(button.dataset.trip):tripExpanded.add(button.dataset.trip);render();break;
+ case'route-filter':routeFilter=button.dataset.route;render();break;
+ case'check-booking':doBooking();break;
+ case'find-available-dates':findAvailableDates();break;
+ case'choose-available-date':{const el=document.querySelector('#promiseBid');if(el){el.value=button.dataset.date;if(bookingDraftState)bookingDraftState.bid=button.dataset.date;checkedBooking=null;bookingResult=null;doBooking();}break;}
+ case'request-management-review':requestManagementReview();break;
+ case'mark-reviewed':{const review=(state.reviews||[]).find(x=>x.id===id);if(review){review.status='Reviewed';note('Management review marked',review.id);persist();render();toast('Marked as reviewed. No exception was automatically approved.');}break;}
+ case'confirm-booking':if(checkedBooking){const o=checkedBooking;checkedBooking=null;const check=P.evaluateBooking(plannableOrders(),state.counts,o,P.todayString(),busyTrucks());if(!check.accepted){bookingResult=null;toast('Booking changed. Recheck date and capacity.',true);render();break;}const trip=check.next.schedules.find(s=>s.orders.some(x=>x.id===o.id));if(!trip){toast('No confirmed vehicle allocation. Retry booking check.',true);break;}o.fulfillmentStatus='placed';o.orderType='Standard Order';o.confirmedBooking=true;o.confirmedAt=new Date().toISOString();o.reservation={truckId:trip.truckId,tripId:trip.id,route:trip.routeName,depart:trip.depart,capacity:trip.capacity,utilization:trip.utilization};bookingResult=null;if(addOrder(o,'Delivery promise confirmed and planning capacity reserved')){toast('Booking confirmed; vehicle capacity recorded in the local plan');go('orders');}}break;
+ case'export-orders':download('dispatchiq_ecommerce_orders.csv',D.toCSV(state.orders),'text/csv');toast('Order data file exported');break;
+ case'export-trips':{const rows=[['trip_id','vehicle','type','route','depart','return','units','capacity','utilization','trip_cost','order_ids'].join(','),...planResult.schedules.map(s=>[s.id,s.truckId,s.truckType,s.routeName,s.depart,s.returnDate,s.units,s.capacity,s.utilization,s.tripCost,'"'+s.orders.map(o=>o.id).join('|')+'"'].join(','))].join('\n');download('dispatchiq_trip_schedule.csv',rows,'text/csv');toast('Trip schedule Comma-Separated Values file exported');break;}
+ case'export-report':download('dispatchiq_analytics.json',JSON.stringify({generatedAt:new Date().toISOString(),dataProvenance:'demo orders + optional public mock carts + optional incoming order service',orders:planResult.totalOrders,scheduled:planResult.scheduledOrders,coverage:planResult.coverage,utilization:planResult.overallUtil,cost:planResult.cost,exceptions:planResult.unscheduled,fulfillment: Object.fromEntries(lifecycleCounts().map(x=>[x.id,x.count])),recordedDepartures:(state.dispatchHistory||[]).length,routeSummary:routeSummary().map(x=>({route:x.r.name,units:x.units,trips:x.ss.length,cost:x.cost}))},null,2),'application/json');toast('Analytics report exported');break;
+ case'import-csv':document.querySelector('#csvInput').click();break;
+ case'toggle-stream':timer? (stopStream(),note('Feed paused','Order stream paused'),render()) :restartStream();break;
+ case'inject-order':{const o=D.simulateOrder(state.orders);if(addOrder(o,'Manual test injection'))toast('Test order injected');break;}
+ case'fetch-carts':fetchPublicCarts();break;
+ case'poll-inbound':pollInbound();break;
+ case'resolve':{const o=state.orders.find(x=>x.id===id);if(o){go('booking');document.querySelector('#promiseCity').value=o.destination;document.querySelector('#promiseBid').value=o.bid;const n=Math.max(1,80-o.units);document.querySelector('#promiseLoad').value=n;document.querySelector('#promiseProduct').value='Consolidation test';toast('Prepared a compatible test booking; check its feasibility.');}break;}
+ }}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.page){go(b.dataset.page);return;}if(b.dataset.action){applyAction(b.dataset.action,b);return;}if(b.id==='quickAdd')showNewOrder();if(b.id==='menuBtn')document.querySelector('#sidebar').classList.toggle('open');});
+document.addEventListener('click',e=>{if(e.target.classList?.contains('modal-backdrop'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.querySelector('#modalRoot .modal')){e.preventDefault();closeModal();}});
+document.addEventListener('change',e=>{if(e.target.id==='orderStatusFilter'){orderFilter=e.target.value;render();}if(e.target.id==='orderTypeFilter'){orderTypeFilter=e.target.value;render();}if(e.target.id==='promiseCity'){if(bookingDraftState)bookingDraftState.destination=e.target.value;checkedBooking=null;bookingResult=null;availableDates=[];bookingDateInfo='';document.querySelector('#bookingResultContainer')&&(document.querySelector('#bookingResultContainer').innerHTML='');document.querySelector('.booking-availability')?.remove();}if(e.target.id==='feedMode'){streamMode=e.target.value;if(timer)restartStream();else render();}if(e.target.id==='feedRate'){streamMs=Number(e.target.value);if(timer)restartStream();else render();}});
+document.addEventListener('input',e=>{if(['promiseCity','promiseLoad','promiseBid','promiseProduct'].includes(e.target.id)){if(bookingDraftState){const k={promiseCity:'destination',promiseLoad:'units',promiseBid:'bid',promiseProduct:'product'}[e.target.id];bookingDraftState[k]=e.target.id==='promiseLoad'?Number(e.target.value):e.target.value;}checkedBooking=null;bookingResult=null;if(e.target.id!=='promiseBid'){availableDates=[];bookingDateInfo='';document.querySelector('.booking-availability')?.remove();}document.querySelector('#bookingResultContainer')&&(document.querySelector('#bookingResultContainer').innerHTML='');}if(e.target.id==='searchOrders'){const pos=e.target.selectionStart;orderQuery=e.target.value;render();const input=document.querySelector('#searchOrders');input.focus();input.setSelectionRange(pos,pos);}});
+document.addEventListener('submit',e=>{if(e.target.getAttribute('id')==='createOrderForm'){e.preventDefault();const data=Object.fromEntries(new FormData(e.target).entries()),o={...data,units:Number(data.units),amount:Number(data.amount||0),channel:'Manual demo',source:'Manually created'};const err=validOrder(o);if(err){document.querySelector('#newOrderError').textContent=err;return;}closeModal();addOrder(o);toast('Order added and plan updated');}
+ if(e.target.id==='routeForm'){e.preventDefault();const r=P.getRoute(e.target.dataset.route),data=Object.fromEntries(new FormData(e.target).entries());let days=r.stops.map((_,i)=>Number(data['stop'+i])),roundTrip=Number(data.roundTripDays),factor=Number(data.factor);
+ if(days.some((d,i)=>!Number.isInteger(d)||d<1||(i>0&&d<days[i-1]))||!Number.isInteger(roundTrip)||roundTrip<Math.max(...days)*2||!Number.isFinite(factor)||factor<.2||factor>5){document.querySelector('#routeFormError').textContent='Transit days must be increasing; round trip must be at least twice the longest outbound transit, factor 0.2–5.';return;}
+ r.roundTripDays=roundTrip;r.factor=factor;r.stops.forEach((s,i)=>s[1]=days[i]);saveRouteConfig();note('Route edited',`${r.name} duration and cost assumptions updated`);replan();closeModal();render();toast('Route assumptions saved');}});
+document.querySelector('#csvInput').addEventListener('change',async e=>{const file=e.target.files[0];e.target.value='';if(!file)return;const txt=await file.text();let parsed;try{parsed=D.parseCSV(txt);}catch(err){toast('Invalid Comma-Separated Values file',true);return;}let added=0,skipped=0;for(const o of parsed){if(state.orders.length>=350||validOrder(o)){skipped++;continue;}state.orders.push({...o,source:o.source||'Order file import',channel:o.channel||'Order file',receivedAt:new Date().toISOString()});added++;}note('Order file import',`${added} orders imported; ${skipped} invalid or duplicate`);replan();render();toast(`${added} orders imported. ${skipped} skipped.`);});
+function init(){restoreRouteConfig();replan();render();checkServer().then(()=>{if(view==='live')render();});setInterval(()=>{document.querySelector('#clock').textContent=new Date().toLocaleString('en-IN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'});},1000);note('Session ready','Order lifecycle and upcoming dispatch planner loaded; historical statuses are illustrative');}
+init();
+})();
+</script>
+</body></html>
